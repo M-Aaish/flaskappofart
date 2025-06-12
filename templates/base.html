@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Artistic Vision Studio</title>
+
+  <!-- Basic responsive meta + CSS resets -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Font Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --primary: #3498db;
+      --secondary: #6c757d;
+      --accent: #2c3e50;
+      --text: #2c3e50;
+      --border-light: #ddd;
+      --shadow: rgba(0,0,0,0.1);
+      --header-bg: #343a40;
+      --header-text: #ffffff;
+      --nav-hover: rgba(255,255,255,0.1);
+      --nav-active: #3498db;
+    }
+
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ====== HEADER / NAVBAR ====== */
+    header.site-header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--header-text);
+    }
+    nav.site-nav {
+      display: flex;
+      gap: 1rem;
+    }
+    nav.site-nav a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--header-text);
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: background-color 0.2s ease;
+    }
+    nav.site-nav a:hover {
+      background: var(--nav-hover);
+    }
+    nav.site-nav a.active {
+      background: var(--nav-active);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      font-weight: 600;
+    }
+
+    /* ====== MAIN CONTAINER ====== */
+    .container {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 2rem auto;
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 10px 25px var(--shadow);
+      padding: 2rem;
+    }
+
+    h1.page-title {
+      font-size: 2.4rem;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    form {
+      margin-bottom: 2rem;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      display: block;
+      color: var(--accent);
+    }
+    input[type="file"],
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      border: 2px solid var(--border-light);
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      background: #fff;
+    }
+    input[type="range"] {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    textarea {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      border: 2px solid var(--border-light);
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+    button:hover { background: var(--accent); transform: scale(1.02); }
+    .btn-secondary { background: var(--secondary); }
+    .btn-secondary:hover { background: #5a6268; }
+
+    .error {
+      color: red;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .result-img {
+      display: block;
+      margin: 1rem auto;
+      max-width: 100%;
+      border: 2px solid var(--border-light);
+      border-radius: 8px;
+    }
+
+    .color-block {
+      width: 100px;
+      height: 100px;
+      border-radius: 5px;
+      border: 2px solid var(--border-light);
+      margin: 0.5rem;
+    }
+
+    .swatch-grid { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+    .swatch-item { text-align: center; width: 120px; }
+
+    .db-action-btn { margin: 0.5rem 0; width: 100%; }
+
+    .message {
+      padding: 0.75rem; border-radius: 5px; margin-bottom: 1rem;
+    }
+    .message.success { background: #d4edda; color: #155724; }
+    .message.warning { background: #fff3cd; color: #856404; }
+    .message.danger  { background: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SITE HEADER ===== -->
+  <header class="site-header">
+    <div class="logo">Artistic Vision Studio</div>
+    <nav class="site-nav">
+      <a href="{{ url_for('image_generator_page') }}"   class="{% if active_page=='image_generator' %}active{% endif %}">🖼️ Image Generator</a>
+      <a href="{{ url_for('shape_detector_page') }}"    class="{% if active_page=='shape_detector' %}active{% endif %}">🔍 Shape Detector</a>
+      <a href="{{ url_for('oil_painting_page') }}"      class="{% if active_page=='oil_painting' %}active{% endif %}">🎨 Oil Painting</a>
+      <a href="{{ url_for('colour_merger_page') }}"     class="{% if active_page=='colour_merger' %}active{% endif %}">🌈 Colour Mixer</a>
+      <a href="{{ url_for('recipe_generator_page') }}"  class="{% if active_page=='recipe_generator' %}active{% endif %}">🧪 Recipe Generator</a>
+      <a href="{{ url_for('colors_db_page') }}"         class="{% if active_page=='colors_db' %}active{% endif %}">📚 Colors Database</a>
+      <a href="{{ url_for('foogle_man_repo_page') }}"   class="{% if active_page=='foogle_man_repo' %}active{% endif %}">👨‍🎨 Foogle Man Repo</a>
+      <a href="{{ url_for('paint_geometrize_page') }}"  class="{% if active_page=='paint_geometrize' %}active{% endif %}">✨ Paint &amp; Geometrize</a>
+    </nav>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="container">
+    {% block content %}
+    <!-- Child templates will inject content here -->
+    {% endblock %}
+  </div>
+
+  {# ===============  CHILD SCRIPTS GO HERE  =============== #}
+  {% block extra_js %}
+  {% endblock %}
+</body>
+</html>

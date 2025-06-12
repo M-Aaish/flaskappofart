@@ -1,0 +1,327 @@
+/* RESET - Basic Tag Reset */
+a,
+abbr,
+acronym,
+address,
+applet,
+b,
+big,
+blockquote,
+body,
+caption,
+center,
+cite,
+code,
+dd,
+del,
+dfn,
+div,
+dl,
+dt,
+em,
+fieldset,
+font,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+html,
+i,
+iframe,
+ins,
+kbd,
+label,
+legend,
+li,
+object,
+ol,
+p,
+pre,
+q,
+s,
+samp,
+small,
+span,
+strike,
+strong,
+sub,
+sup,
+table,
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr,
+tt,
+u,
+ul,
+var {
+  background: 0 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+  outline: 0;
+}
+
+/* STY_HDR - Header Styling */
+h1 {
+  font: 600 50px "Open Sans", sans-serif;
+  letter-spacing: -3px;
+  margin-bottom: 0;
+  color: #e91e63;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+h2 {
+  font: 400 30px "Open Sans";
+  letter-spacing: -2px;
+  color: #673ab7;
+}
+
+h3 {
+  font: 600 20px "Open Sans";
+  letter-spacing: -1px;
+  color: #009688;
+}
+
+/* STY_PARA - Paragraph Styling */
+p {
+  font-family: "Open Sans", sans-serif;
+  font-size: 15px;
+  line-height: 22px;
+  color: #888;
+  margin: 10px 0;
+}
+
+/* STY_LINK - Links and Text Color */
+a,
+.stitched,
+p a {
+  color: #000;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #555;
+}
+
+/* STY_BODY - Body Setup */
+body {
+  text-align: center;
+  background-color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  color: #000;
+}
+
+/* STY_IMG - Image Settings */
+img {
+  max-width: 90%;
+}
+
+/* STY_LOGO - Logo Image */
+.logo {
+  margin: 15px;
+}
+
+/* STY_INPUT - Inputs & Forms */
+input,
+select,
+textarea {
+  padding: 9px;
+  border: 1px solid #E5E5E5;
+  outline: 0;
+  background: url(bg_form.png) left top repeat-x #FFF;
+}
+
+input,
+textarea {
+  margin: 10px;
+  width: 150px;
+  background: -webkit-gradient(linear, left top, left 25, from(#FFF), color-stop(4%, #EEE), to(#FFF));
+  background: -moz-linear-gradient(top, #FFF, #EEE 1px, #FFF 25px);
+  box-shadow: rgba(0, 0, 0, .1) 0 0 8px;
+  -moz-box-shadow: rgba(0, 0, 0, .1) 0 0 8px;
+  -webkit-box-shadow: rgba(0, 0, 0, .1) 0 0 8px;
+}
+
+input:focus,
+input:hover,
+textarea:focus,
+textarea:hover {
+  border-color: #C9C9C9;
+  -webkit-box-shadow: rgba(0, 0, 0, .15) 0 0 8px;
+}
+
+input[type=checkbox] {
+  transform: scale(1.3);
+  margin: 10px;
+  width: auto;
+  height: auto;
+}
+
+select {
+  margin: 10px;
+  width: 240px;
+  background: -webkit-gradient(linear, left top, left 25, from(#FFF), color-stop(4%, #EEE), to(#FFF));
+  background: -moz-linear-gradient(top, #FFF, #EEE 1px, #FFF 25px);
+  box-shadow: rgba(0, 0, 0, .1) 0 0 8px;
+  -moz-box-shadow: rgba(0, 0, 0, .1) 0 0 8px;
+  -webkit-box-shadow: rgba(0, 0, 0, .1) 0 0 8px;
+}
+
+/* STY_BTN - Buttons */
+.button {
+  width: auto;
+  margin: 10px;
+  -moz-box-shadow: inset 0 1px 0 0 #fff;
+  -webkit-box-shadow: inset 0 1px 0 0 #fff;
+  box-shadow: inset 0 1px 0 0 #fff;
+  background: linear-gradient(to bottom, #fff 5%, #f6f6f6 100%);
+  background-color: #fff;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  cursor: pointer;
+  color: #666;
+  padding: 6px 24px;
+  text-shadow: 0 1px 0 #fff;
+  font: 400 30px "Open Sans";
+  letter-spacing: -2px;
+}
+
+.button:hover {
+  background: linear-gradient(to bottom, #f6f6f6 5%, #fff 100%);
+  background-color: #f6f6f6;
+}
+
+.button:active {
+  position: relative;
+  top: 1px;
+}
+
+/* STY_BOX - Containers and Cards */
+.container {
+  display: inline-block;
+  vertical-align: top;
+  margin: 10px;
+  min-width: 200px;
+}
+
+.stitched {
+  padding: 20px;
+  margin: 10px;
+  background: #fff;
+  font-size: 21px;
+  line-height: 1.3em;
+  border: 2px dashed #aaa;
+  border-radius: 10px;
+  box-shadow: 0 0 0 4px #fff, 2px 1px 6px 4px rgba(10, 10, 0, .5);
+  font-weight: 400;
+}
+
+/* STY_SLDR - Slider Containers */
+.black,
+.blue,
+.green,
+.orange,
+.red {
+  margin: 20px;
+  width: 200px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.black .noUi-connect { background: #000; }
+.red .noUi-base { background: #c0392b; }
+.green .noUi-base { background: #27ae60; }
+.blue .noUi-base { background: #2980b9; }
+.orange .noUi-base { background: orange; }
+
+.verticalslider {
+  height: 50px;
+}
+
+/* STY_ACC - Accordion Section */
+#accordion #check-1 { display: none; }
+#accordion label {
+  background: #fff;
+  border-radius: .25em;
+  cursor: pointer;
+  display: block;
+  margin-bottom: .125em;
+  padding: .25em 1em;
+  z-index: 20;
+}
+
+#accordion label:hover {
+  color: #000;
+}
+
+#accordion input:checked+label {
+  background: #fff;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-bottom: 0;
+}
+
+#accordion .settings {
+  background: #fff;
+  height: 0;
+  overflow: hidden;
+  z-index: 10;
+}
+
+#accordion .settings p {
+  padding: 1em;
+}
+
+#accordion input:checked~.settings {
+  height: auto;
+}
+
+/* STY_CTRL - Controls Panel */
+#controls,
+#saveoptions {
+  background: #fefefe;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(100,100,100,0.1);
+}
+
+/* STY_MISC - Miscellaneous */
+.textboxes, .sliders {
+  margin: 20px;
+}
+
+.textbox {
+  resize: horizontal;
+  min-width: 80vw;
+  min-height: 120px;
+  max-height: 600px;
+  border: 3px solid #ccc;
+  padding: 5px;
+  background-position: bottom right;
+  background-repeat: no-repeat;
+}
+
+svg {
+  pointer-events: none;
+  z-index: 50 !important;
+  position: relative;
+  overflow: visible;
+}
+
+canvas {
+  min-width: 50px;
+  width: 70vw;
+}
+
+#defaultimage,
+#sampleimages {
+  display: none;
+}

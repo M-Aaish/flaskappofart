@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="page-title">🧪 Paint&nbsp;Recipe&nbsp;Generator</h1>
+
+<style>
+  :root { --highlight: #4CAF50; --toggle-border: #ccc; }
+  .d-none { display: none !important; }
+
+  /* Picker‐mode pills */
+  .picker-mode-switch {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .picker-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem 1rem;
+    border: 2px solid var(--toggle-border);
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: .2s;
+    user-select: none;
+  }
+  .picker-toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+  .picker-toggle span {
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    border: 1px solid #999;
+  }
+  .picker-toggle.box span {
+    background: linear-gradient(135deg, #f00, #0f0, #00f);
+  }
+  .picker-toggle.sliders span {
+    background: linear-gradient(45deg, red, green, blue);
+  }
+  .picker-toggle.active {
+    background: var(--highlight);
+    border-color: var(--highlight);
+    color: #fff;
+  }
+
+  /* Swatches */
+  .swatch-block {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: .25rem;
+  }
+
+  /* Inline form fields */
+  .form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;    /* changed from flex-end to center */
+    margin-bottom: 1.5rem;
+  }
+  .form-inline .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-inline .form-group select,
+  .form-inline .form-group input {
+    width: 100%;
+  }
+
+  /* Layout */
+  .recipes-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .recipe-card {
+    flex: 1 1 calc(33.333% - 1rem);
+    min-width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .recipe-card h5 { margin-bottom: .5rem; }
+  .recipe-card ul { padding-left: 1.25rem; margin: 0; }
+  #pickerContainer {
+    width: 380px;
+    max-width: 380px;
+  }
+</style>
+
+{% if error %}
+  <div class="message danger">{{ error }}</div>
+{% endif %}
+
+<form id="recipeForm" method="post" action="{{ url_for('recipe_generator_page') }}">
+
+  <!-- 1) Picker‐mode toggle -->
+  <div class="picker-mode-switch">
+    {% set mode = request.form.get('picker_mode','box') %}
+    <label class="picker-toggle box {{ 'active' if mode=='box' else '' }}">
+      <input type="radio" name="picker_mode" value="box" {{ 'checked' if mode=='box' else '' }}>
+      <span></span> Rectangle
+    </label>
+    <label class="picker-toggle sliders {{ 'active' if mode=='sliders' else '' }}">
+      <input type="radio" name="picker_mode" value="sliders" {{ 'checked' if mode=='sliders' else '' }}>
+      <span></span> RGB Sliders
+    </label>
+  </div>
+
+  <!-- 2) Colour pickers -->
+  <div class="row mb-4">
+    <div class="col-12 d-flex justify-content-center">
+      <div id="boxPickerArea" class="{{ '' if mode=='box' else 'd-none' }}">
+        <label class="form-label">Target Colour</label>
+        <div id="pickerContainer" class="border rounded"></div>
+      </div>
+      <div id="sliderPickerArea" class="{{ '' if mode=='sliders' else 'd-none' }}" style="max-width:380px;">
+        {% set r=selected_color[0] %}{% set g=selected_color[1] %}{% set b=selected_color[2] %}
+        <label class="form-label">Red (0–255): <span id="rv">{{ r }}</span></label>
+        <input type="range" id="r_slider" name="r_slider" min="0" max="255" value="{{ r }}" class="form-range mb-2">
+        <label class="form-label">Green (0–255): <span id="gv">{{ g }}</span></label>
+        <input type="range" id="g_slider" name="g_slider" min="0" max="255" value="{{ g }}" class="form-range mb-2">
+        <label class="form-label">Blue (0–255): <span id="bv">{{ b }}</span></label>
+        <input type="range" id="b_slider" name="b_slider" min="0" max="255" value="{{ b }}" class="form-range mb-2">
+      </div>
+    </div>
+  </div>
+
+  <!-- 3) Shared hidden hex + inline options -->
+  <input type="hidden" id="hex_color" name="hex_color"
+         value="{{ '#%02x%02x%02x'|format(selected_color[0],selected_color[1],selected_color[2]) }}">
+
+  <div class="form-inline">
+    <div class="form-group" style="flex:1 1 200px;">
+      <label for="db_choice">Colour Database</label>
+      <select id="db_choice" name="db_choice" class="form-select">
+        {% for db in databases %}
+          <option value="{{ db }}" {% if db==request.form.get('db_choice') %}selected{% endif %}>{{ db }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group" style="width:150px;">
+      <label for="step">Precision (%)</label>
+      <input type="number" id="step" name="step" class="form-control" min="1" max="10" step="0.5"
+             value="{{ request.form.step or 10 }}">
+    </div>
+    <div class="form-group" style="width:120px;">
+      <label>Picked RGB</label>
+      <input type="text" id="rgbDisplay" class="form-control text-center"
+             value="{{ '%d,%d,%d'|format(selected_color[0],selected_color[1],selected_color[2]) }}" readonly>
+    </div>
+    <div class="form-group">
+      <label>&nbsp;</label>
+      <div id="pickedSwatch" class="swatch-block"
+           style="background: {{ '#%02x%02x%02x'|format(selected_color[0],selected_color[1],selected_color[2]) }};">
+      </div>
+    </div>
+  </div>
+
+  <!-- 4) Generate button -->
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <button type="submit" class="btn btn-success">Generate</button>
+  </div>
+</form>
+
+<!-- 5) Results -->
+{% if recipes %}
+  <h3 class="mb-3">Top Recipes (Target RGB: {{ selected_color|join(',') }})</h3>
+  <div class="recipes-row">
+    {% for rec, mixed, err in recipes %}
+      <div class="recipe-card">
+        <h5 class="text-center">
+          Recipe {{ loop.index }}<br>
+          <small>(Err {{ err|round(2) }})</small>
+        </h5>
+        <div style="display:flex; gap:.5rem; justify-content:center;" class="mb-2">
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <div class="swatch-block" style="background:rgb({{ selected_color|join(',') }})"></div>
+            <small>Target</small>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <div class="swatch-block" style="background:rgb({{ mixed|join(',') }})"></div>
+            <small>Mixed</small>
+          </div>
+        </div>
+        <ul>
+          {% for name, perc in rec if perc > 0 %}
+            <li>{{ name }}: {{ perc|round(1) }}%</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5/dist/iro.min.js" defer></script>
+<script defer>
+document.addEventListener('DOMContentLoaded', () => {
+  let picker = null;
+  const boxArea      = document.getElementById('boxPickerArea');
+  const sliderArea   = document.getElementById('sliderPickerArea');
+  const hexInput     = document.getElementById('hex_color');
+  const rgbDisplay   = document.getElementById('rgbDisplay');
+  const pickedSwatch = document.getElementById('pickedSwatch');
+
+  function updateSwatch(col) {
+    pickedSwatch.style.background = col;
+  }
+
+  function initRectPicker() {
+    if (picker) return;
+    const container = document.getElementById('pickerContainer');
+    container.innerHTML = '';
+    picker = new iro.ColorPicker(container, {
+      width: container.clientWidth,
+      color: hexInput.value,
+      borderWidth: 1,
+      borderColor: '#ddd',
+      layout: [
+        { component: iro.ui.Box },
+        { component: iro.ui.Slider, options: { sliderType: 'hue' } }
+      ]
+    });
+    picker.on('color:change', clr => {
+      const hex = clr.hexString;
+      hexInput.value   = hex;
+      rgbDisplay.value = `${clr.rgb.r},${clr.rgb.g},${clr.rgb.b}`;
+      updateSwatch(hex);
+    });
+  }
+
+  function destroyRectPicker() {
+    if (!picker) return;
+    if (picker.destroy) picker.destroy();
+    picker = null;
+  }
+
+  // initialize on load if box mode
+  if (document.querySelector('input[name="picker_mode"][value="box"]').checked) {
+    initRectPicker();
+  }
+
+  // toggle listener
+  document.querySelectorAll('input[name="picker_mode"]').forEach(radio => {
+    radio.addEventListener('change', e => {
+      document.querySelectorAll('.picker-toggle').forEach(lbl => lbl.classList.remove('active'));
+      e.target.closest('label').classList.add('active');
+      if (e.target.value === 'box') {
+        boxArea.classList.remove('d-none');
+        sliderArea.classList.add('d-none');
+        initRectPicker();
+      } else {
+        boxArea.classList.add('d-none');
+        sliderArea.classList.remove('d-none');
+        destroyRectPicker();
+      }
+    });
+  });
+
+  // slider live update
+  ['r_slider','g_slider','b_slider'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', () => {
+      const hex = '#' + [r_slider.value, g_slider.value, b_slider.value]
+        .map(v => Number(v).toString(16).padStart(2,'0')).join('');
+      rgbDisplay.value = `${r_slider.value},${g_slider.value},${r_slider.value}`;
+      hexInput.value = hex;
+      updateSwatch(hex);
+    });
+  });
+});
+</script>
+{% endblock %}

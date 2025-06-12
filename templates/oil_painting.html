@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="page-title">🎨 Oil Painting Generator</h1>
+
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" action="{{ url_for('oil_painting_page') }}">
+    <label for="oil_image">Upload an image (jpg/png):</label>
+    <input type="file" id="oil_image" name="oil_image" accept=".jpg,.jpeg,.png" required>
+
+    <label for="intensity">
+      Painting Intensity:
+      <span id="int_label">{{ intensity or 10 }}</span>
+    </label>
+    <input
+      type="range"
+      id="intensity"
+      name="intensity"
+      min="1"
+      max="100"
+      value="{{ intensity or 10 }}"
+      oninput="int_label.innerText = this.value;"
+    >
+
+    <button type="submit">Generate Oil Painting</button>
+  </form>
+
+  {% if result_image_data %}
+    <h2>Result:</h2>
+    <img
+      class="result-img"
+      src="data:image/png;base64,{{ result_image_data }}"
+      alt="Oil-painted result"
+    >
+
+    <form action="{{ url_for('download_oil') }}" method="get">
+      <button type="submit" class="btn-secondary">Download Oil Painting</button>
+    </form>
+  {% endif %}
+{% endblock %}

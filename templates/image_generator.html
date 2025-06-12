@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="page-title">🖼️ Shape Art Generator</h1>
+
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" action="{{ url_for('image_generator_page') }}">
+    <label for="image">Upload a base image (jpg/png):</label>
+    <input
+      type="file"
+      id="image"
+      name="image"
+      accept=".jpg,.jpeg,.png"
+      required
+    >
+
+    <label for="shape_type">Shape Type:</label>
+    <select id="shape_type" name="shape_type" onchange="toggleSizeInputs()">
+      <option value="Triangle" {% if shape_option == 'Triangle' %}selected{% endif %}>
+        Triangle
+      </option>
+      <option value="Rectangle" {% if shape_option == 'Rectangle' %}selected{% endif %}>
+        Rectangle
+      </option>
+      <option value="Circle" {% if shape_option == 'Circle' %}selected{% endif %}>
+        Circle
+      </option>
+    </select>
+
+    <label for="num_shapes">Number of Shapes:</label>
+    <input
+      type="number"
+      id="num_shapes"
+      name="num_shapes"
+      min="1"
+      max="500"
+      value="{{ num_shapes or 100 }}"
+    >
+
+    <div id="triangle_sizes" {% if shape_option != 'Triangle' %}style="display:none;"{% endif %}>
+      <label for="max_triangle_size">Max Triangle Size:</label>
+      <input
+        type="number"
+        id="max_triangle_size"
+        name="max_triangle_size"
+        min="1"
+        max="100"
+        value="{{ max_size or 50 }}"
+      >
+
+      <label for="min_triangle_size">Min Triangle Size:</label>
+      <input
+        type="number"
+        id="min_triangle_size"
+        name="min_triangle_size"
+        min="1"
+        max="100"
+        value="{{ min_size or 15 }}"
+      >
+    </div>
+
+    <div id="rectcircle_sizes" {% if shape_option == 'Triangle' %}style="display:none;"{% endif %}>
+      <label for="min_size">Min Shape Size:</label>
+      <input
+        type="number"
+        id="min_size"
+        name="min_size"
+        min="1"
+        max="100"
+        value="{{ min_size or 10 }}"
+      >
+
+      <label for="max_size">Max Shape Size:</label>
+      <input
+        type="number"
+        id="max_size"
+        name="max_size"
+        min="1"
+        max="100"
+        value="{{ max_size or 15 }}"
+      >
+    </div>
+
+    <button type="submit">Generate Shape Art</button>
+  </form>
+
+  {% if result_image_data %}
+    <h2>Resulting Shape Art:</h2>
+    <img
+      class="result-img"
+      src="data:image/png;base64,{{ result_image_data }}"
+    >
+    <form action="{{ url_for('download_shape_art') }}" method="get">
+      <button type="submit" class="btn-secondary">Download Shape Art</button>
+    </form>
+  {% endif %}
+
+  <script>
+    function toggleSizeInputs() {
+      const shape = document.getElementById('shape_type').value;
+      document.getElementById('triangle_sizes').style.display =
+        (shape === 'Triangle') ? 'block' : 'none';
+      document.getElementById('rectcircle_sizes').style.display =
+        (shape !== 'Triangle') ? 'block' : 'none';
+    }
+  </script>
+{% endblock %}

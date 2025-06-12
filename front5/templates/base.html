@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Stego-Shape Suite</title>
+
+  <!-- Google Fonts + Base Styles -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    :root {
+      --bg: #ffffff;           
+      --card-bg: #ffffff;
+      --primary: #ff6f3c;      
+      --secondary: #00a3bf;    
+      --accent: #3c91e6;       
+      --text-dark: #222222;    
+      --border-light: #ddd;
+      --shadow: rgba(0,0,0,0.08);
+
+      /* Header/Nav colors */
+      --header-bg: #3c91e6;    
+      --header-text: #ffffff;
+      --nav-hover-bg: rgba(255,255,255,0.1);
+      --nav-active-bg: #ff6f3c; 
+    }
+
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ——— Header + Navigation Bar ——— */
+    header.site-header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header.site-header .logo {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    nav.site-nav {
+      display: flex;
+      gap: 1rem;
+    }
+    nav.site-nav a {
+      position: relative;
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--header-text);
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
+    }
+    nav.site-nav a:hover {
+      background: var(--nav-hover-bg);
+    }
+    nav.site-nav a.active {
+      background: var(--nav-active-bg);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      font-weight: 600;
+    }
+
+    /* ——— Container for page content ——— */
+    .container {
+      background: var(--card-bg);
+      max-width: 850px;
+      width: 100%;
+      margin: 2rem auto;
+      border-radius: 15px;
+      box-shadow: 0 15px 35px var(--shadow);
+      padding: 2.5rem 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ——— Page Title (inside container) ——— */
+    h1.page-title {
+      font-size: 2.4rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.06em;
+    }
+
+    /* ——— Full-screen animated canvas ——— */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: var(--bg);
+    }
+
+    /* ——— Form grid and styling (shared by all pages) ——— */
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .form-section {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 1.8rem 2rem;
+      border: 2px solid var(--border-light);
+      box-shadow: 0 6px 18px var(--shadow);
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.4rem;
+      display: block;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    input[type="file"],
+    select,
+    input[type="number"],
+    input[readonly] {
+      width: 100%;
+      padding: 0.85rem 1.1rem;
+      margin-bottom: 1.2rem;
+      border-radius: 8px;
+      border: 2px solid var(--border-light);
+      font-size: 1rem;
+      font-weight: 500;
+      background: #fff;
+      color: #000;
+      transition: border-color 0.25s ease;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+      cursor: pointer;
+      background: var(--secondary);
+      border: none;
+      padding: 0.6rem 1.4rem;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+    }
+    input[type="file"]::-webkit-file-upload-button:hover {
+      background: var(--primary);
+    }
+
+    input[type="number"]:focus,
+    select:focus,
+    input[readonly]:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 10px var(--primary);
+    }
+
+    button {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(255,111,60,0.5);
+      transition: background-color 0.3s ease, transform 0.15s ease;
+    }
+    button:hover:not([disabled]) {
+      background: var(--secondary);
+      box-shadow: 0 10px 20px rgba(0,163,191,0.6);
+      transform: scale(1.05);
+    }
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .image-preview {
+      grid-column: span 2;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    img.preview {
+      max-width: 360px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px var(--shadow);
+      cursor: crosshair;
+    }
+
+    #downloadBtn {
+      margin-top: 1rem;
+      background: var(--secondary);
+      color: white;
+      font-weight: 700;
+      border: none;
+      padding: 0.6rem 1.3rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 18px rgba(0,163,191,0.6);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #downloadBtn:hover {
+      background: var(--primary);
+    }
+
+    .click-message {
+      margin-top: 1.2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+      min-height: 1.3em;
+    }
+
+    .recipe-section {
+      margin-top: 2.5rem;
+      grid-column: span 2;
+    }
+    .recipe {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 2px solid var(--primary);
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+      box-shadow: 0 4px 15px var(--shadow);
+    }
+    .recipe-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.7rem;
+    }
+    .recipe-color {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      border: 2px solid var(--secondary);
+      box-shadow: 0 0 12px var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <!-- ——— Animated particle background ——— -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- ——— SITE HEADER & NAVIGATION ——— -->
+  <header class="site-header">
+    <div class="logo">Stego-Shape Suite</div>
+
+    <nav class="site-nav" aria-label="Main site navigation">
+      <!--
+        For each <a>, we: 
+          1. Use url_for(...) to point at the correct Flask endpoint
+          2. Add class="active" on whichever page is currently rendering
+      -->
+      <a href="{{ url_for('image_generator') }}"
+         class="{% if active_page=='image_generator' %}active{% endif %}">
+        Image Generator
+      </a>
+      <a href="{{ url_for('shape_detector') }}"
+         class="{% if active_page=='shape_detector' %}active{% endif %}">
+        Shape Detector
+      </a>
+      <a href="{{ url_for('oil_painting') }}"
+         class="{% if active_page=='oil_painting' %}active{% endif %}">
+        Oil Painting Generator
+      </a>
+      <a href="{{ url_for('colour_merger') }}"
+         class="{% if active_page=='colour_merger' %}active{% endif %}">
+        Colour Merger
+      </a>
+      <a href="{{ url_for('recipe_generator') }}"
+         class="{% if active_page=='recipe_generator' %}active{% endif %}">
+        Recipe Generator
+      </a>
+      <a href="{{ url_for('colors_db') }}"
+         class="{% if active_page=='colors_db' %}active{% endif %}">
+        Colors DataBase
+      </a>
+      <a href="{{ url_for('foogle_man_repo') }}"
+         class="{% if active_page=='foogle_man_repo' %}active{% endif %}">
+        Foogle Man Repo
+      </a>
+      <a href="{{ url_for('paint_geometrize') }}"
+         class="{% if active_page=='paint_geometrize' %}active{% endif %}">
+        Paint &amp; Geometrize
+      </a>
+    </nav>
+  </header>
+
+  <!-- ——— MAIN CONTENT AREA ——— -->
+  <div class="container" role="main">
+    {% block content %}
+    <!-- Each child template will override this block -->
+    {% endblock %}
+  </div>
+
+  <!-- ——— JS for Shape Detector image interaction ——— -->
+  {% block scripts %}
+  <!-- If a child template needs to push JS (e.g. Shape Detector), it can override this block. -->
+  {% endblock %}
+
+  <!-- ——— Particle animation script (shared) ——— -->
+  <script>
+    (() => {
+      const canvas = document.getElementById('bgCanvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, particles = [];
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * W;
+          this.y = Math.random() * H;
+          this.r = 1 + Math.random() * 3;
+          const speed = 0.2 + Math.random() * 0.8;
+          const angle = Math.random() * 2 * Math.PI;
+          this.vx = Math.cos(angle) * speed;
+          this.vy = Math.sin(angle) * speed;
+          const t = Math.random();
+          this.color = t < 0.6 
+            ? `rgba(60,145,230, ${0.1 + Math.random() * 0.3})`
+            : `rgba(255,111,60, ${0.1 + Math.random() * 0.3})`;
+        }
+        move() {
+          this.x += this.vx;
+          this.y += this.vy;
+          if (this.x < 0 || this.x > W) this.vx *= -1;
+          if (this.y < 0 || this.y > H) this.vy *= -1;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        const count = Math.floor((W * H) / 10000);
+        for (let i = 0; i < count; i++) {
+          particles.push(new Particle());
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, W, H);
+        // Draw a subtle radial fade so particles remain visible
+        const grad = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H)/1.2);
+        grad.addColorStop(0, 'rgba(255,255,255, 0.7)');
+        grad.addColorStop(1, 'rgba(255,255,255, 1)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+
+        for (let p of particles) {
+          p.move();
+          p.draw();
+        }
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', initParticles);
+      initParticles();
+      animate();
+    })();
+  </script>
+</body>
+</html>

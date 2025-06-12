@@ -1,0 +1,316 @@
+{# templates/recipe_generator.html #}
+{% extends "base.html" %}
+
+{% block content %}
+  <!-- Page header with icon and title -->
+  <div class="page-header">
+    <span class="header-icon">🌈</span>
+    <h1 class="page-title">Colour Mixer</h1>
+  </div>
+
+  <style>
+    :root {
+      --highlight: #4CAF50;
+      --toggle-border: #ccc;
+    }
+
+    .page-header {
+      display: inline-flex;
+      align-items: center;
+      margin: 1rem auto;
+    }
+    .header-icon {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+    }
+    .page-title {
+      font-size: 1.25rem;
+      margin: 0;
+      color: inherit;
+    }
+
+    /* Picker container, now 300px */
+    #pickerContainer {
+      width: 300px;
+      max-width: 100%;
+    }
+
+    /* Current RGB bar + action buttons */
+    #currentBar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      max-width: 600px;
+      margin: 0.5rem auto 1rem;
+    }
+    /* now a fixed, auto‐sized box */
+    #rgbDisplay {
+      flex: none;
+      width: 100px;
+      display: inline-block;
+      text-align: center;
+    }
+    /* Preview swatch matches grid size */
+    #rgbSwatch {
+      width: 80px;
+      height: 80px;
+      border: 1px solid #555;
+      border-radius: 4px;
+    }
+    /* Buttons spacing */
+    #addColorBtn,
+    #mixColorsBtn,
+    #deleteModeBtn,
+    #deleteAllBtn {
+      margin-left: 0.25rem;
+    }
+
+    /* Swatch wrapper */
+    .swatch-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin: 1rem 0;
+      overflow: hidden;
+    }
+    .swatch-arrow {
+      cursor: pointer;
+      padding: 0.25rem;
+      user-select: none;
+      font-size: 1.25rem;
+      color: #666;
+    }
+
+    /* Scrollable line */
+    .db-swatch-line {
+      flex: 1;
+      display: flex;
+      gap: 0.125rem;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 0 0.125rem;
+    }
+
+    /* Each swatch-item */
+    .swatch-item {
+      flex-shrink: 0;
+      position: relative;
+      cursor: pointer;
+    }
+    .swatch-item.delete-mode {
+      opacity: 0.6;
+    }
+    .swatch-item .color-block {
+      width: 80px;
+      height: 80px;
+      border: 1px solid #555;
+      border-radius: 4px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      font-size: 0.6rem;
+      line-height: 1;
+      text-shadow: 0 0 2px rgba(0,0,0,0.6);
+
+      overflow: hidden;
+      padding: 2px;
+    }
+    .swatch-item .color-block span {
+      white-space: nowrap;
+    }
+  </style>
+
+  <form method="post" action="{{ url_for('colour_merger_page') }}">
+    <!-- Colour picker -->
+    <div id="boxPickerArea" class="text-center mb-4">
+      <label class="form-label">Target Colour</label>
+      <div id="pickerContainer" class="border rounded mx-auto"></div>
+    </div>
+
+    <!-- Controls: Add, Mix, Delete Mode, Delete All -->
+    <div id="currentBar">
+      <input
+        type="text"
+        id="rgbDisplay"
+        class="form-control"
+        value="255,255,255"
+      />
+      <div id="rgbSwatch" style="background: rgb(255,255,255)"></div>
+
+      <button type="button" id="addColorBtn" class="btn btn-primary">
+        + Add Colour
+      </button>
+      <button type="submit" id="mixColorsBtn" class="btn btn-primary">
+        Mix Colours
+      </button>
+      <button type="button" id="deleteModeBtn" class="btn btn-secondary">
+        Delete Mode
+      </button>
+      <button type="button" id="deleteAllBtn" class="btn btn-secondary">
+        Delete All
+      </button>
+    </div>
+
+    <!-- Swatches (with hidden inputs for backend) -->
+    <div class="swatch-wrapper">
+      <div class="swatch-arrow left">&lt;</div>
+      <div class="db-swatch-line">
+        {% for c in colors %}
+          <div class="swatch-item">
+            <div
+              class="color-block"
+              style="background: rgb({{c.rgb[0]}},{{c.rgb[1]}},{{c.rgb[2]}})"
+            ></div>
+            <input
+              type="hidden"
+              name="rgb-{{loop.index0}}"
+              value="{{c.rgb[0]}},{{c.rgb[1]}},{{c.rgb[2]}}"
+            />
+            <input
+              type="hidden"
+              name="weight-{{loop.index0}}"
+              value="{{c.weight}}"
+            />
+          </div>
+        {% endfor %}
+      </div>
+      <div class="swatch-arrow right">&gt;</div>
+    </div>
+  </form>
+
+  <!-- Mixed output -->
+  {% if mixed_rgb %}
+    <hr class="my-4"/>
+    <div class="d-flex align-items-center">
+      <div>
+        <h2>Mixed Colour</h2>
+        <p class="mb-1">
+          RGB: {{ mixed_rgb[0] }}, {{ mixed_rgb[1] }}, {{ mixed_rgb[2] }}
+        </p>
+        <div
+          style="
+            width: 120px;
+            height: 120px;
+            background: rgb({{ mixed_rgb[0] }},{{ mixed_rgb[1] }},{{ mixed_rgb[2] }});
+            border: 1px solid #555;
+            border-radius: 4px;
+          "
+        ></div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5/dist/iro.min.js" defer></script>
+<script defer>
+document.addEventListener('DOMContentLoaded', () => {
+  // 1) Initialise picker (300px max)
+  const picker = new iro.ColorPicker('#pickerContainer', {
+    width: Math.min(300, window.innerWidth - 40),
+    borderWidth: 1,
+    borderColor: '#ddd',
+    layout: [
+      { component: iro.ui.Box },
+      { component: iro.ui.Slider, options: { sliderType: 'hue' } }
+    ]
+  });
+
+  // 2) Grab elements
+  const rgbInput      = document.getElementById('rgbDisplay');
+  const rgbSwatch     = document.getElementById('rgbSwatch');
+  const addBtn        = document.getElementById('addColorBtn');
+  const deleteModeBtn = document.getElementById('deleteModeBtn');
+  const deleteAllBtn  = document.getElementById('deleteAllBtn');
+  const swatchLine    = document.querySelector('.db-swatch-line');
+  const scrollLeft    = document.querySelector('.swatch-arrow.left');
+  const scrollRight   = document.querySelector('.swatch-arrow.right');
+
+  // Helpers
+  function toRgbString(c) {
+    return `${Math.round(c.r)},${Math.round(c.g)},${Math.round(c.b)}`;
+  }
+  function applyCurrent(rgbStr) {
+    rgbInput.value = rgbStr;
+    rgbSwatch.style.background = `rgb(${rgbStr})`;
+  }
+
+  // 3) Wire picker & input
+  picker.on('color:change', clr => applyCurrent(toRgbString(clr.rgb)));
+  rgbInput.addEventListener('input', () => {
+    rgbSwatch.style.background = `rgb(${rgbInput.value})`;
+  });
+
+  // 4) Label updater (RGB + % + contrast)
+  function updateSwatchLabels() {
+    const blocks = swatchLine.querySelectorAll('.color-block');
+    const total  = blocks.length;
+    const pct    = Math.round(100 / total) + '%';
+
+    blocks.forEach(block => {
+      block.innerHTML = '';
+      const bg = getComputedStyle(block).backgroundColor;
+      const [r,g,b] = bg.match(/\d+/g).map(Number);
+      const lum = 0.2126*r + 0.7152*g + 0.0722*b;
+      block.style.color = lum > 128 ? '#000' : '#fff';
+
+      const rgbSpan = document.createElement('span');
+      rgbSpan.textContent = `${r},${g},${b}`;
+      const pctSpan = document.createElement('span');
+      pctSpan.textContent = pct;
+      block.appendChild(rgbSpan);
+      block.appendChild(pctSpan);
+    });
+  }
+  updateSwatchLabels();
+
+  // 5) + Add Colour
+  addBtn.addEventListener('click', () => {
+    const rgbStr = rgbInput.value;
+    const idx    = swatchLine.children.length;
+    const item   = document.createElement('div');
+    item.className = 'swatch-item';
+    item.innerHTML = `
+      <div class="color-block" style="background: rgb(${rgbStr})"></div>
+      <input type="hidden" name="rgb-${idx}" value="${rgbStr}" />
+      <input type="hidden" name="weight-${idx}" value="1" />
+    `;
+    swatchLine.appendChild(item);
+    updateSwatchLabels();
+    swatchLine.scrollTo({ left: swatchLine.scrollWidth, behavior: 'smooth' });
+  });
+
+  // 6) Delete Mode toggle
+  let deleteMode = false;
+  deleteModeBtn.addEventListener('click', () => {
+    deleteMode = !deleteMode;
+    deleteModeBtn.classList.toggle('btn-danger', deleteMode);
+    deleteModeBtn.textContent = deleteMode ? 'Exit Delete' : 'Delete Mode';
+    swatchLine.querySelectorAll('.swatch-item').forEach(si => {
+      si.classList.toggle('delete-mode', deleteMode);
+      si.onclick = deleteMode
+        ? () => { si.remove(); updateSwatchLabels(); }
+        : null;
+    });
+  });
+
+  // 7) Delete All
+  deleteAllBtn.addEventListener('click', () => {
+    swatchLine.innerHTML = '';
+  });
+
+  // 8) Arrow scrolling
+  const STEP = 100;
+  scrollLeft.addEventListener('click', () =>
+    swatchLine.scrollBy({ left: -STEP, behavior: 'smooth' })
+  );
+  scrollRight.addEventListener('click', () =>
+    swatchLine.scrollBy({ left: STEP, behavior: 'smooth' })
+  );
+});
+</script>
+{% endblock %}

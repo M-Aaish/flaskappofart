@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="page-title">🔍 Shape Detector &amp; Analyzer</h1>
+
+<style>
+  :root { --highlight: var(--primary); }
+
+  /* Swatches */
+  .swatch-wrapper { position:relative; }
+  .swatch-grid    { display:flex; flex-wrap:nowrap; gap:1rem;
+                    overflow-x:auto; scroll-behavior:smooth; padding-bottom:.5rem; }
+  .swatch-grid::-webkit-scrollbar { display:none; }
+  .swatch-item  { text-align:center; width:100px; flex:0 0 auto; }
+  .swatch-block { width:100px; height:100px; border:2px solid #ddd; border-radius:8px;
+                  margin-bottom:.5rem; cursor:pointer; display:flex;
+                  align-items:center; justify-content:center; font-weight:600;
+                  transition:outline .15s ease; }
+  .swatch-block.highlighted { outline:4px solid var(--highlight); outline-offset:2px; }
+
+  /* Arrow buttons */
+  .scroll-btn { position:absolute; top:50%; transform:translateY(-50%);
+                width:36px; height:36px; border:none; border-radius:50%;
+                background:rgba(255,255,255,.85); box-shadow:0 0 4px rgba(0,0,0,.25);
+                cursor:pointer; font-size:1.25rem; display:flex;
+                align-items:center; justify-content:center; z-index:10; }
+  .scroll-btn-left  { left:-18px; }
+  .scroll-btn-right { right:-18px; }
+  .scroll-btn:hover { background:rgba(255,255,255,1); }
+
+  /* Recipe cards */
+  .recipes-row { display:flex; flex-wrap:wrap; gap:1rem; }
+  .recipe-card { flex:1 1 calc(33.333% - 1rem); min-width:250px;
+                 border:1px solid #ddd; border-radius:6px; padding:1rem;
+                 display:flex; flex-direction:column; }
+  .recipe-card ul { padding-left:1.25rem; margin:0; }
+  .recipe-card h5 { margin-bottom:.5rem; }
+</style>
+
+<!-- ────────── Upload / Decode Form ────────── -->
+<form method="post" enctype="multipart/form-data"
+      action="{{ url_for('shape_detector_page') }}" class="mb-4">
+  <div class="mb-3">
+    <label class="form-label">Upload encoded image</label>
+    <input type="file" name="encoded_image" class="form-control"
+           accept=".png,.jpg,.jpeg" required>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Shape to detect</label>
+      <select name="shape_detect" class="form-select">
+        <option value="Triangle"  {% if request.form.shape_detect=='Triangle'  %}selected{% endif %}>Triangle</option>
+        <option value="Rectangle" {% if request.form.shape_detect=='Rectangle' %}selected{% endif %}>Rectangle</option>
+        <option value="Circle"    {% if request.form.shape_detect=='Circle'    %}selected{% endif %}>Circle</option>
+      </select>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Min size</label>
+      <input type="number" name="min_size" class="form-control" min="1"
+             value="{{ request.form.min_size or 3 }}">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Max size</label>
+      <input type="number" name="max_size" class="form-control" min="1"
+             value="{{ request.form.max_size or 10 }}">
+    </div>
+  </div>
+
+  <button type="submit" name="action" value="decode" class="btn btn-primary">
+    Decode
+  </button>
+</form>
+
+{% if decoded_image_data %}
+<hr class="my-4">
+
+<!-- ────────── Image + Swatches Row ────────── -->
+<div class="row">
+  <div class="col-md-8 text-center mb-4">
+    <img id="annotatedImg"
+         src="data:image/png;base64,{{ decoded_image_data }}"
+         class="img-fluid border rounded"
+         style="width:100%; max-width:500px; height:auto; cursor:crosshair;"
+         alt="Annotated result">
+
+    <form action="{{ url_for('download_analysis') }}" class="text-center mt-3">
+      <button class="btn btn-secondary">Download Annotated Image</button>
+    </form>
+  </div>
+
+  <div class="col-md-4">
+    <h3 class="mb-3">🔎 Colors</h3>
+
+    <div class="swatch-wrapper">
+      <button type="button" class="scroll-btn scroll-btn-left"
+              onclick="scrollSwatches(-1)">&#8249;</button>
+      <button type="button" class="scroll-btn scroll-btn-right"
+              onclick="scrollSwatches(1)">&#8250;</button>
+
+      <div id="swatchScroll" class="swatch-grid">
+        {% for color, count in grouped_colors %}
+          {% set r,g,b = color %}
+          {% set txt = (r+g+b)/3 < 128 and '#fff' or '#000' %}
+          <div class="swatch-item">
+            <div class="swatch-block"
+                 data-rgb="{{ r }},{{ g }},{{ b }}"
+                 style="background:rgb({{ r }},{{ g }},{{ b }}); color:{{ txt }};">
+              <span>{{ r }},{{ g }},{{ b }}</span>
+            </div>
+            <small>Count: {{ count }}</small>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div><!-- /row -->
+
+<!-- ────────── Recipe Generator ────────── -->
+<hr class="my-4">
+<h3 class="mb-3">🎨 Paint Recipe Generator</h3>
+
+<form id="recipeForm" class="mb-4">
+  <input type="hidden" id="selectedColorInput" name="selected_color">
+  <input type="hidden" name="shape_detect"
+         value="{{ request.form.shape_detect or 'Rectangle' }}">
+  <input type="hidden" name="min_size"
+         value="{{ request.form.min_size or 3 }}">
+  <input type="hidden" name="max_size"
+         value="{{ request.form.max_size or 10 }}">
+
+  <div class="row g-2 align-items-center">
+    <div class="col-md-4">
+      <label class="form-label">Colour&nbsp;DB</label>
+      <select name="db_choice" class="form-select" required>
+        {% for db in db_list %}
+          <option value="{{ db }}">{{ db }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Precision&nbsp;(step&nbsp;%)</label>
+      <input type="number" name="step" class="form-control"
+             min="1" max="50" step="0.5" value="10.0" required>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Picked&nbsp;RGB</label>
+      <input type="text" id="rgbDisplay" class="form-control" readonly>
+    </div>
+
+    <div class="col-md-2 text-end">
+      <label>&nbsp;</label><br>
+      <button id="generateBtn" class="btn btn-success w-100" disabled>
+        Generate
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- Recipes injected here -->
+<div id="recipeResults"></div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ---------- helpers ---------- */
+const SCROLL_STEP = 200, THRESHOLD = 10;
+const parseRGB = s => s.split(',').map(Number);
+const dist = (r1,g1,b1,r2,g2,b2)=>
+  Math.hypot(r1-r2,g1-g2,b1-b2);
+
+document.addEventListener('DOMContentLoaded',() => {
+
+  /* horizontal scroll helpers */
+  const scrollRail = document.getElementById('swatchScroll');
+  window.scrollSwatches = dir => {
+    if (scrollRail)
+      scrollRail.scrollBy({left: dir*SCROLL_STEP, behavior:'smooth'});
+  };
+  const scrollIntoViewHoriz = node => {
+    const rail = scrollRail;
+    if (!rail) return;
+    const railRect = rail.getBoundingClientRect();
+    const nodeRect = node.getBoundingClientRect();
+    if (nodeRect.left < railRect.left)
+      rail.scrollBy({left: nodeRect.left - railRect.left, behavior:'smooth'});
+    else if (nodeRect.right > railRect.right)
+      rail.scrollBy({left: nodeRect.right - railRect.right, behavior:'smooth'});
+  };
+
+  const img      = document.getElementById('annotatedImg');
+  const swatches = [...document.querySelectorAll('.swatch-block')];
+  const hidden   = document.getElementById('selectedColorInput');
+  const rgbDisp  = document.getElementById('rgbDisplay');
+  const btn      = document.getElementById('generateBtn');
+  const results  = document.getElementById('recipeResults');
+  const form     = document.getElementById('recipeForm');
+
+  /* Pick colour */
+  if (img && swatches.length) {
+    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
+    const sync   = () => {canvas.width=img.naturalWidth; canvas.height=img.naturalHeight;
+                          ctx.drawImage(img,0,0);};
+    img.complete ? sync() : img.addEventListener('load',sync,{once:true});
+
+    img.addEventListener('click',ev => {
+      const r = img.getBoundingClientRect();
+      const x = Math.round((ev.clientX-r.left)*img.naturalWidth / r.width);
+      const y = Math.round((ev.clientY-r.top )*img.naturalHeight/ r.height);
+      const [R,G,B] = ctx.getImageData(x,y,1,1).data;
+
+      swatches.forEach(s => s.classList.remove('highlighted'));
+      for (const s of swatches) {
+        const [r0,g0,b0] = parseRGB(s.dataset.rgb);
+        if (dist(R,G,B,r0,g0,b0) < THRESHOLD) {
+          s.classList.add('highlighted');
+          scrollIntoViewHoriz(s);                 // only horizontal
+          hidden.value = s.dataset.rgb;
+          rgbDisp.value = s.dataset.rgb;          // visible field
+          btn.disabled = false;
+          break;
+        }
+      }
+    });
+  }
+
+  /* AJAX recipe submit */
+  if (form) {
+    form.addEventListener('submit', async ev => {
+      ev.preventDefault();
+      if (btn.disabled) return;
+
+      btn.disabled = true; btn.textContent = 'Generating…';
+      try {
+        const res = await fetch('/generate_recipe',{method:'POST',body:new FormData(form)});
+        const j = await res.json();
+        if (!j.ok) throw new Error(j.msg || 'Server error');
+
+        const cards = j.recipes.map((r,i)=>`
+          <div class="recipe-card">
+            <h5 class="text-center">Recipe ${i+1}<br><small>(Err ${r.error.toFixed(2)})</small></h5>
+            <div style="display:flex; gap:.5rem; justify-content:center;" class="mb-2">
+              <div>
+                <div class="swatch-block" style="background:rgb(${form.selected_color.value})"></div>
+                <small>Target</small>
+              </div>
+              <div>
+                <div class="swatch-block" style="background:rgb(${r.mix})"></div>
+                <small>Mixed</small>
+              </div>
+            </div>
+            <ul>
+              ${r.recipe.map(x=>`<li>${x.name}: ${x.perc}%</li>`).join('')}
+            </ul>
+          </div>`).join('');
+
+        results.innerHTML = `<div class="recipes-row">${cards}</div>`;
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false; btn.textContent = 'Generate';
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

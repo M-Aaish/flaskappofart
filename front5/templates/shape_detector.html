@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block content %}
+  <!-- Shape Detector page’s heading and form go here -->
+  <h1 class="page-title">Shape Detector</h1>
+
+  <div class="content">
+    <!-- ——— UPLOAD / DECODE FORM ——— -->
+    <section class="form-section" aria-label="Image upload and decode form">
+      <form method="post" enctype="multipart/form-data" novalidate>
+        <label for="imageInput">Upload Image:</label>
+        <input id="imageInput" type="file" name="image" accept="image/png, image/jpeg" required>
+
+        <label for="shapeSelect">Shape:</label>
+        <select id="shapeSelect" name="shape" aria-required="true">
+          <option {% if request.form.shape=='Triangle' %}selected{% endif %}>Triangle</option>
+          <option {% if request.form.shape=='Rectangle' %}selected{% endif %}>Rectangle</option>
+          <option {% if request.form.shape=='Circle' %}selected{% endif %}>Circle</option>
+        </select>
+
+        <label for="minSizeInput">Min Size:</label>
+        <input id="minSizeInput" type="number" name="min_size" value="{{ request.form.min_size or 3 }}" min="1">
+
+        <label for="maxSizeInput">Max Size:</label>
+        <input id="maxSizeInput" type="number" name="max_size" value="{{ request.form.max_size or 10 }}" min="1">
+
+        <button type="submit" name="action" value="decode" aria-label="Decode the uploaded image">
+          Decode
+        </button>
+      </form>
+    </section>
+
+    {% if decoded_image %}
+    <!-- ——— DECODED IMAGE + RECIPE SECTION ——— -->
+    <section class="form-section" aria-label="Decoded image and color recipe generator">
+      <div class="image-preview" aria-label="Decoded image preview and download">
+        <img id="detectedImage" class="preview"
+             src="data:image/png;base64,{{ decoded_image }}"
+             alt="Detected result image">
+        <button id="downloadBtn" aria-label="Download decoded image">Download PNG</button>
+        <div id="clickMessage" class="click-message" aria-live="polite"></div>
+      </div>
+
+      <form id="recipeForm" style="margin-top: 1.5rem;" aria-label="Generate color recipes">
+        <input type="hidden" name="base_color" id="baseColor">
+
+        <label for="rgbDisplay">Selected RGB:</label>
+        <input id="rgbDisplay" type="text" readonly placeholder="Click on a shape…">
+
+        <label for="dbChoiceSelect">Choose colour-database:</label>
+        <select id="dbChoiceSelect" name="db_choice">
+          {% for db in dbs %}
+          <option value="{{ db }}">{{ db }}</option>
+          {% endfor %}
+        </select>
+
+        <label for="stepInput">Step size (bigger = faster, smaller = finer):</label>
+        <input id="stepInput" type="number" name="step" value="10" min="1" max="50">
+
+        <button id="generateBtn" type="submit" disabled>Generate Recipe</button>
+      </form>
+
+      <div id="recipeSection" class="recipe-section" aria-live="polite"></div>
+    </section>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // — Existing JS for clicking into the decoded image —
+  const img         = document.getElementById('detectedImage');
+  const msgDiv      = document.getElementById('clickMessage');
+  const baseColorEl = document.getElementById('baseColor');
+  const rgbDisplay  = document.getElementById('rgbDisplay');
+  const genBtn      = document.getElementById('generateBtn');
+
+  const canvasPreview = document.createElement('canvas');
+  const ctxPreview    = canvasPreview.getContext('2d');
+
+  function copyToCanvas(){
+    if(!img.naturalWidth) return;
+    canvasPreview.width  = img.naturalWidth;
+    canvasPreview.height = img.naturalHeight;
+    ctxPreview.drawImage(img, 0, 0);
+  }
+  img.addEventListener('load', copyToCanvas);
+  copyToCanvas();
+
+  function rgbStr(r,g,b){ return `${r},${g},${b}`; }
+
+  img.addEventListener('click', e=>{
+    const r = img.getBoundingClientRect();
+    const x = Math.floor((e.clientX - r.left) * (img.naturalWidth  / img.width));
+    const y = Math.floor((e.clientY - r.top ) * (img.naturalHeight / img.height));
+    const [R,G,B] = ctxPreview.getImageData(x,y,1,1).data;
+
+    baseColorEl.value = rgbStr(R,G,B);
+    rgbDisplay.value  = rgbStr(R,G,B);
+    genBtn.disabled   = false;
+    genBtn.classList.add('pulse');
+    setTimeout(()=>genBtn.classList.remove('pulse'),1500);
+
+    msgDiv.textContent = `Selected: (${R}, ${G}, ${B})`;
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', e=>{
+    e.preventDefault();
+    const bin  = atob("{{ decoded_image }}");
+    const arr  = Uint8Array.from([...bin].map(c=>c.charCodeAt(0)));
+    const blob = new Blob([arr],{type:'image/png'});
+    const url  = URL.createObjectURL(blob);
+    const a    = Object.assign(document.createElement('a'),
+                               {href:url,download:'decoded.png'});
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('recipeForm').addEventListener('submit', async e=>{
+    e.preventDefault();
+    if(genBtn.disabled) return;
+    const formData = new FormData(e.target);
+    genBtn.textContent='Generating…'; genBtn.disabled=true;
+
+    try{
+      const res  = await fetch('/generate_recipe',{method:'POST',body:formData});
+      const json = await res.json();
+      if(!json.ok) throw new Error(json.msg || 'Server error');
+      const out = json.recipes.map(r=>{
+        const items = r.recipe.map(i=>`<li>${i.name}: ${i.perc}%</li>`).join('');
+        return `<div class="recipe">
+                  <strong>Error:</strong> ${r.error.toFixed(2)}<br>
+                  <div class="recipe-content">
+                    <div class="recipe-color" style="background: rgb(${r.mix});"></div>
+                    <ul>${items}</ul>
+                  </div>
+                </div>`;
+      }).join('');
+      document.getElementById('recipeSection').innerHTML =
+        `<h3>Top 3 Paint Recipes</h3>${out}`;
+    }catch(err){
+      alert('Failed: '+err.message);
+    }finally{
+      genBtn.textContent='Generate Recipe';
+      genBtn.disabled=false;
+    }
+  });
+</script>
+{% endblock %}
