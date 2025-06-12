@@ -1,0 +1,755 @@
+Artisan - Winsor & Newton
+1 Burnt Sienna 58,22,14 1073
+2 Burnt Umber 50,27,15 1346
+3 Cadmium Orange Hue 221,63,0 1338
+4 Cadmium Red Deep Hue 171,0,5 1302
+5 Cadmium Red Medium 221,63,0 1547
+6 Cadmium Red Light 229,42,0 1578
+7 Cadmium Red Dark 166,0,9 1455
+8 Cadmium Yellow Hue 255,139,0 1230
+9 Cadmium Yellow Light 255,194,0 1403
+10 Cadmium Yellow Medium 255,161,0 1534
+11 Cerulean Blue 0,97,102 1584
+12 Cerulean Blue Hue 0,74,91 1216
+13 Cobalt Blue 0,39,71 1264
+14 Dioxazine Purple 21,15,17 1268
+15 French Ultramarine 8,8,32 1277
+16 Ivory Black 27,28,28 1228
+17 Lamp Black 21,21,20 958
+18 Lemon Yellow 239,173,0 1024
+19 Magenta 98,4,32 1282
+20 Permanent Alizarin Crimson 74,1,16 1134
+21 Permanent Rose 130,0,24 1227
+22 Permanent Sap Green 28,42,10 1041
+23 Phthalo Blue (Red Shade) 17,12,37 1090
+24 Phthalo Green (Yellow Shade) 0,32,24 1091
+25 Phthalo Green (Blue Shade) 3,26,33 1021
+26 Prussian Blue 15,11,11 984
+27 Raw Sienna 117,70,17 1211
+28 Raw Umber 37,26,20 1273
+29 Titanium White 249,245,234 1423
+30 Viridian 0,53,40 1149
+31 Yellow Ochre 187,128,18 1128
+32 Zinc White (Mixing White) 250,242,222 1687
+
+Artists Oil - Winsor & Newton
+1 Alizarin Crimson 68,2,6 1045
+2 Bismuth Yellow 255,232,0 1684
+3 Bright Red 197,0,15 1784
+4 Burnt Sienna 82,42,31 1181
+5 Cadmium Lemon 255,222,0 2166
+6 Cadmium Red 204,12,22 2199
+7 Cadmium Yellow 255,164,0 1640
+8 Cadmium Yellow Deep 255,127,15 2171
+9 Cerulean Blue 100,160,0 2195
+10 Cobalt Blue 0,41,117 1495
+11 Cobalt Blue Deep 221,76,100 1871
+12 Cobalt Chromite Green 46,90,76 1749
+13 Cobalt Green 123,110,0 1177
+14 Cobalt Turquoise 0,99,127 1841
+15 Cobalt Turquoise Light 157,160,0 1685
+16 Cobalt Violet 78,23,80 1605
+17 French Ultramarine 50,61,164 1397
+18 Gold Ochre 168,113,37 1610
+19 Green Gold 71,74,14 1072
+20 Indian Yellow 144,87,0 1506
+21 Indian Yellow Deep 119,85,26 1150
+22 Indanthrene Blue 33,23,57 1347
+23 Ivory Black 16,15,17 1357
+24 Lamp Black 26,27,27 965
+25 Lemon Yellow Hue 235,215,84 1723
+26 Mars Black 39,38,39 2133
+27 Naples Yellow Deep 222,156,72 1875
+28 Naples Yellow Light 255,227,151 1970
+29 Olive Green 47,43,32 1070
+30 Oxide of Chromium 57,95,58 2510
+31 Permanent Alizarin Crimson 84,2,17 1157
+32 Permanent Magenta 71,16,26 998
+33 Permanent Mauve 68,50,73 1441
+34 Perylene Black 34,24,24 1065
+35 Prussian Blue 18,28,41 1144
+36 Quinacridone Magenta 108,8,36 1081
+37 Quinacridone Red 144,32,40 1100
+38 Raw Sienna 130,83,39 1316
+39 Raw Umber 64,49,35 1364
+40 Rose Madder Genuine 69,53,53 1222
+41 Sap Green 27 27
+42 Scarlet Lake 213,33,22 1096
+43 Terra Rosa 146,75,63 1505
+44 Terre Verte 38,59,47 1362
+45 Titanium White 251,250,241 1873
+46 Transparent Red Ochre 149,66,40 1432
+47 Transparent Yellow 233,162,0 1093
+48 Transparent Maroon 70,21,17 999
+49 Ultramarine Violet 62,38,126 1422
+50 Vandyke Brown 39,27,19 1318
+51 Venetian Red 127,49,29 1677
+52 Viridian 0,62,53 1360
+53 Winsor Emerald 0,134,84 2143
+54 Winsor Green (Phthalo) 0,50,40 1318
+55 Winsor Green (Yellow shade) 0,60,33 1329
+56 Winsor Lemon 248,65,0 1000
+57 Winsor Orange 129,0,24 1494
+58 Winsor Red Deep 255,204,0 1517
+59 Winsor Yellow 255,145,0 1380
+60 Winsor Yellow Deep 29,23,41 1089
+61 Winsor Violet (Dioxazine) 151,104,47 1060
+62 Zinc White 249,248,235 2355
+
+Createx Airbrush Colors
+1 Neutral Grey 5 144,152,156 1000
+2 Light Olive Gold 172,132,104 1000
+3 Olive Gold 164,129,99 1000
+4 Deep Olive Gold 130,107,92 1000
+5 Light Espresso 155,121,104 1000
+6 Espresso 120,90,76 1000
+7 Deep Espresso 100,74,66 1000
+8 Fair Blush 215,178,163 1000
+9 Blush 204,162,146 1000
+10 Deep Blush 183,135,119 1000
+11 Light Natural 218,199,186 1000
+12 Natural 199,169,146 1000
+13 Deep Natural 176,145,121 1000
+14 Natural Lip 182,123,122 1000
+15 Intrinsic Shade 116,100,114 1000
+16 Cool Tone 76,139,136 1000
+17 Old Bone White 242,236,206 1000
+18 Dermatitus Tan 214,187,153 1000
+19 Injury Ochre 133,94,41 1000
+20 Infectious Pink 217,135,154 1000
+21 Blood Red 119,47,47 1000
+22 Coagulated Crimson 108,45,36 1000
+23 Vascular Violet 61,52,50 1000
+24 Deep Bruise Purple 68,57,57 1000
+25 Expired Blue 69,116,137 1000
+26 Code Blue 55,46,59 1000
+27 Decay 64,62,60 1000
+28 Blunt Trauma Umber 66,60,58 1000
+29 Diseased Umber 62,60,58 1000
+30 Surgery Sienna 87,60,43 1000
+31 Vile Green 57,63,60 1000
+32 White 249,251,247 1000
+33 Black 68,66,63 1000
+34 Yellow 243,175,0 1000
+35 Scarlet 157,0,8 1000
+36 Orange 183,50,14 1000
+37 Violet 62,50,53 1000
+38 Red Violet 76,58,65 1000
+39 Blue Violet 65,54,62 1000
+40 Viridian 38,59,61 1000
+41 Cobalt Blue 60,46,69 1000
+42 Cerulean Blue 63,45,80 1000
+43 Magenta 84,0,35 1000
+44 Burnt Umber 51,52,55 1000
+45 Sepia 57,55,51 1000
+46 Burnt Sienna 101,61,50 1000
+47 Moss Green 53,57,51 1000
+48 Opaque White 252,254,249 1000
+49 Opaque Yellow 255,237,47 1000
+50 Opaque Chrome Yellow 255,167,22 1000
+51 Opaque Orange 255,119,38 1000
+52 Opaque Red Orange 227,74,63 1000
+53 Opaque Red 189,48,59 1000
+54 Opaque Red Grey 1000
+55 Opaque Light Blue 70,111,204 1000
+56 Opaque Dark Blue 68,57,96 1000
+57 Opaque Purple 71,57,71 1000
+58 Opaque Green 39,69,68 1000
+59 Opaque Black 59,60,61 1000
+60 Cyan CMYK 23,59,87 1000
+61 Magenta CMYK 104,4,43 1000
+62 Yellow CMYK 255,221,0 1000
+
+Designers Gouache - Winsor & Newton
+1 Alizarin Crimson 154,44,67 1478
+2 Burnt Sienna 145,76,54 1762
+3 Burnt Umber 104,72,61 1636
+4 Cadmium Lemon 255,229,46 2240
+5 Cadmium Orange 253,111,42 2740
+6 Cadmium Red 210,59,55 2130
+7 Cadmium Scarlet 233,69,47 1944
+8 Cadmium Yellow 255,189,0 2069
+9 Cerulean Blue 161,171,167 2585
+10 Cobalt Blue 33,104,201 2662
+11 Cobalt Turquoise Light 166,177 2233
+12 Flame Red 210,64,53 1528
+13 Indigo 56,59,88 1818
+14 Ivory Black 44,41,43 1811
+15 Jet Black 39,33,35 1788
+16 Lamp Black 57,56,60 1478
+17 Lemon Yellow 255,234,12 1542
+18 Light Purple 115,57,152 1594
+19 Magenta 119,50,117 1618
+20 Marigold Yellow 255,120,28 1545
+21 Naples Yellow Deep 223,154,72 1509
+22 Orange Lake Light 237,96,47 1710
+23 Oxide of Chromium 78,107,82 2178
+24 Permanent Alizarin Crimson 156,44,60 1489
+25 Perylene Violet 76,53,66 1469
+26 Permanent Rose 157,49,67 1759
+27 Perylene Black 59,54,53 1405
+28 Perylene Maroon 125,54,69 1421
+29 Permanent Yellow Deep 255,179,0 1495
+30 Permanent White 255,245,251 2350
+31 Primary Blue 128,203 1841
+32 Primary Red 196,10,73 1540
+33 Primary Yellow 255,222,0 1496
+34 Prussian Blue 27,64,111 1159
+35 Raw Sienna 191,119,66 1905
+36 Raw Umber 151,112,74 1694
+37 Red Ochre 118,61,65 2322
+38 Rose Tyrien 171,0,106 1480
+39 Spectrum Red 173,60,65 1523
+40 Spectrum Violet 81,51,161 1549
+41 Ultramarine 49,52,174 2021
+42 Ultramarine Green Shade 58,109,218 1692
+43 Viridian 49,65,65 1667
+44 Winsor Blue 62,50,87 1631
+45 Winsor Green 30,83,74 1839
+46 Winsor Violet (Dioxazine) 86,61,124 1574
+47 Yellow Ochre 209,148,75 1799
+48 Zinc White 246,238,242 2904
+
+Ferrario1919 Oil - Ferrario
+1 Titanium White 247,246,244 2175
+2 Cadmium Yellow Lemon 251,211,0 2036
+3 Cadmium Yellow Light 255,196,0 2027
+4 Ferrario1919 Yellow Deep 255,151,0 1635
+5 Ferrario1919 Orange 255,115,0 1618
+6 Cadmium Red light 232,62,0 1985
+7 Ferrario1919 Red 192,0,0 1612
+8 Magenta 129,8,30 1603
+9 Alizarine Madder 89,0,17 1592
+10 Magenta Lake 115,0,30 1605
+11 Manganese Violet 69,22,75 1949
+12 Ultramarine Blue 11,8,34 1547
+13 Ultramarine Sky Blue 13,9,45 1553
+14 Ferrario1919 Blue - Red hue 13,16,48 1616
+15 Cobalt Blue light 150,165 2075
+16 Ferrario1919 Blue - Green hue 19,21,59 1656
+17 Prussian Blue 11,16,36 1588
+18 Cerulean Blue 0,98,146 2239
+19 Cobalt Turquoise 150,165 2175
+20 Cobalt Green Light 0,100,98 2249
+21 Ferrario1919 Green - Blue hue 0,34,35 1672
+22 Emerald Green 0,69,58 1627
+23 Ferrario1919 Green - Yellow hue 0,47,33 1706
+24 Permanent Green 0,112,58 2306
+25 Cadmium Green Light 118,198,0 2131
+26 Lemon Ochre 185,126,26 1528
+27 Transparent Mars Yellow 136,90,41 1768
+28 Burnt Umber 42,27,18 1598
+29 Transparent Brown 51,22,13 1627
+30 Ivory Black 22,21,22 1475
+
+Galeria Acrylic - Winsor & Newton
+1 Buff Titanium 224,186,144 1165
+2 Burnt Sienna 87,51,47 1023
+3 Burnt Umber 73,57,55 1037
+4 Cadmium Red Hue 190,37,37 993
+5 Cadmium Yellow Deep Hue 255,161,0 1064
+6 Cadmium Yellow Medium Hue 255,186,0 963
+7 Cobalt Blue 37,80,180 1117
+8 Crimson 167,1,33 1068
+9 Green Gold 147,127,46 1100
+10 Hooker's Green 47,58,52 1086
+11 Ivory Black 43,41,44 991
+12 Lamp Black 42,41,45 1121
+13 Lemon Yellow 255,227,0 1083
+14 Mixing White 255,247,254 1038
+15 Permanent Magenta 106,36,58 845
+16 Phthalo Green 14,50,55 1079
+17 Process Magenta 182,34,60 982
+18 Process Cyan 26,54,118 1054
+19 Process Yellow 255,200,0 984
+20 Prussian Blue Hue 42,37,54 999
+21 Raw Sienna 116,71,52 966
+22 Raw Umber 65,53,46 1005
+23 Red Ochre 126,43,36 975
+24 Sap Green 51,100,58 1079
+25 Titanium White 254,246,253 1185
+26 Transparent Yellow 191,137,31 1099
+27 Ultramarine 54,47,83 1060
+28 Vermilion Hue 212,34,32 987
+29 Winsor Violet 48,40,44 982
+30 Yellow Ochre 188,134,61 870
+
+Gamblin Artist Oil
+1 Ultramarine Blue 44,44,59 1847
+2 Cadmium Lemon 253,221,0 2866
+3 Cadmium Red Medium 198,53,58 2722
+4 Ivory Black 46,46,46 1884
+5 Mars Black 32,30,30 2782
+6 Burnt Umber 53,36,30 1988
+7 Raw Umber 66,58,51 2537
+8 Burnt Sienna 102,62,54 2093
+9 Raw Sienna 149,91,42 2240
+10 Yellow Ochre 180,124,48 2000
+11 Indian Red 110,45,40 2569
+12 Emerald Green 0,136,72 2077
+13 Viridian 24,72,62 1890
+14 Cobalt Green 11,75,60 2863
+15 Phthalo Turquoise 6,26,37 1906
+16 Cobalt Teal 41,83,180 2538
+17 Manganese Blue Hue 26,74,98 2070
+18 Cerulean Blue 0,97,140 2800
+19 Cobalt Blue 0,45,109 2308
+20 Phthalo Blue 17,13,36 1684
+21 Indanthrone Blue 50,46,52 1916
+22 Prussian Blue 13,11,12 1772
+23 Manganese Violet 60,15,56 2073
+24 Dioxazine Purple 38,32,33 1880
+25 Cobalt Violet 70,27,72 2425
+26 Quinacridone Violet 85,20,34 1705
+27 Quinacridone Magenta 97,18,41 1738
+28 Phthalo Emerald 0,36,29 1903
+29 Chromium Oxide Green 76,109,73 2869
+30 Cadmium Yellow Deep 255,165,0 2620
+31 Permanent Green Light 35,150,0 1723
+32 Cadmium Yellow Medium 255,184,0 2665
+33 Cadmium Yellow Light 254,217,0 2606
+34 Hansa Yellow Light 241,203,0 1645
+35 Cadmium Orange 255,126,0 3022
+36 Cadmium Orange Deep 243,91,23 2889
+37 Cadmium Red Light 220,50,40 2798
+38 Napthol Scarlet 191,40,26 1816
+39 Perylene Red 99,0,7 1585
+40 Cadmium Red Deep 165,45,56 2768
+41 Quinacridone Red 138,25,42 1811
+42 Alizarin Crimson 72,28,31 1595
+43 Naphtol Red 191,3,0 1817
+44 Titanium White 248,245,237 2659
+45 Titanium Buff 203,
+
+Golden Heavy Body Acrylic
+1010 Bone Black 35,34,36 976
+1020 Burnt Sienna 112,62,53 1111
+1030 Burnt Umber 70,56,54 1038
+1040 Carbon Black 30,29,31 925
+1050 Cerulean Blue Chromium 0,85,152 1104
+1060 Chromium Oxide Green 76,106,67 1038
+1070 C.P. Cadmium Orange 255,99,0 1044
+1090 C.P. Cadmium Red Light 227,40,16 1125
+1100 C.P. Cadmium Red Medium 185,5,32 1089
+1130 C.P. Cadmium Yellow Med 255,200,0 1115
+1135 C.P. Cadmium Yellow Primrose 249,231,20 1065
+1140 Cobalt Blue 8,50,160 1078
+1147 Diarylide Yellow 255,162,0 911
+1150 Dioxazine Purple 25,17,19 912
+1180 Hansa Yellow Light 250,226,0 950
+1225 Nickel Azo Yellow 126,93,9 915
+1255 Phthalo Blue / G.S. 16,3,62 901
+1270 Phthalo Green / B.S. 0,31,41 915
+1275 Phthalo Green / Y.S. 0,31,27 922
+1276 Pyrrole Orange 239,61,0 905
+1277 Pyrrole Red 187,0,0 950
+1305 Quinacridone Magenta 90,0,37 911
+1310 Quinacridone Red 150,0,37 924
+1340 Raw Sienna 157,103,52 1066
+1350 Raw Umber 64,56,54 804
+1360 Red Oxide 132,53,41 1124
+1370 Titan Buff 225,205,186 1122
+1380 Titanium White 255,247,255 1179
+1400 Ultramarine Blue 50,47,75 1054
+1401 Ultramarine Violet 54,47,75 1048
+1407 Yellow Ochre 186,124,51 1019
+1445 Natural Gray N5 120,116,122 1086
+1500 Primary Cyan 0,63,130 936
+1510 Primary Magenta 169,26,49 922
+1530 Primary Yellow 255,215,0 947
+
+Grumbacher Max Water Mixable Oil
+1 Alizarin Crimson 78,3,23 1447
+23 Burnt Sienna 103,47,33 1757
+24 Burnt Umber 44,33,24 1670
+25 Cadmium-Barium Orange 251,97,0 2378
+26 Cadmium-Barium Red Deep 144,42,53 2499
+27 Cadmium-Barium Red Light 215,45,44 2579
+29 Cadmium-Barium Red Med 167,0,12 2517
+30 Cadmium-Barium Red Vermillion 196,50,58 2530
+31 Cadmium-Barium Yellow Deep 255,156,0 2431
+33 Cadmium-Barium Yellow Light 254,188,0 2354
+34 Cadmium-Barium Yellow Med 255,158,0 2504
+36 Cadmium-Barium Yellow Pale 254,221,0 2654
+40 Cerulean Blue 0,89,132 2498
+48 Chromium Oxide Green 67,101,66 3024
+49 Cobalt Blue 0,46,85 1842
+60 Diarylide Yellow 255,136,0 1435
+61 Dioxazine Purple 31,26,23 1660
+76 French Ultramarine Blue 13,13,32 1683
+95 Grumbacher Red 196,15,0 1660
+109 Indanthrone Blue 31,26,38 1467
+115 Ivory Black 47,46,46 1758
+116 Lamp Black 43,45,47 1262
+134 Mars Black 34,33,33 2330
+146 Naples Yellow 235,176,89 2769
+160 Permanent Blue 20,22,34 1648
+163 Perylene Maroon 98,28,40 1455
+166 Prussian Green 18,36,30 1526
+168 Prussian Blue 23,18,12 1550
+169 Quinacridone Orange 67,21,11 1362
+170 Quinacridone Red 162,0,28 1501
+171 Raw Sienna 151,92,42 2036
+172 Raw Umber 52,44,34 1715
+187 Sap Green 19,33,20 1590
+203 Thalo Blue 25,12,50 1335
+205 Thalo Green BS 0,37,34 1583
+208 Thalo Red Rose 136,0,22 1569
+210 Thalo Yellow Green 63,163,12 1558
+211 Thio Violet 94,10,28 1645
+223 Venetian Red 117,43,29 2583
+244 Yellow Ochre 185,126,30 1927
+248 Zinc White 251,245,224 2599
+306 Thalo Green YS 0,49,37 1639
+307 Ultramarine Blue Deep 15,19,36 1572
+309 Cobalt Turquoise 163,167 1893
+21211 Titanium White 253,253,247 2330
+
+Liquitex Heavy Body Acrylic:
+118 Quinacridone Blue Violet 46,18,30 892
+127 Burnt Sienna 115,64,57 1044
+150 Cadmium Orange 255,121,0 1129
+152 Cadmium Red Light 226,52,28 1098
+163 Cadmium Yellow Deep Hue 255,171,0 946
+164 Cerulean Blue 0,96,161 1084
+172 Cobalt Teal 169,177 1014
+244 Ivory Black 44,43,47 984
+292 Naphthol 171,0,32 902
+300 Deep Magenta 96,17,59 906
+312 Light Green Permanent 0,142,49 923
+316 Phthalocyanine Blue GS 33,25,64 955
+319 Phthalocyanine Green YS 0,45,42 917
+330 Raw Sienna 150,92,57 1046
+381 Cobalt Blue Hue 49,58,151 1039
+432 Titanium White 255,249,255 1156
+500 Medium Magenta 190,67,152 983
+599 Neutral Gray Val.5 121,119,125 1057
+650 Light Emerald Green 68,169,74 996
+740 Vivid Lime Green 131,189,58 914
+770 Light Blue Permanent 61,186,221 1068
+830 Cadmium Yellow Med. Hue 255,190,0 917
+
+Polycolor - Maimeri
+18 Titanium White 253,254,249 1669
+52 Brilliant Orange 216,77,44 1553
+74 Brilliant Yellow Light 255,245,135 1654
+100 Lemon Yellow 239,217,0 1599
+116 Primary Yellow 255,217,0 1658
+118 Deep Yellow 255,263,0 1592
+131 Yellow Ochre 203,148,72 1636
+161 Raw Sienna 179,114,67 1692
+166 Carmine 154,52,53 1633
+191 Red Ochre 139,69,55 1782
+220 Briliant Red 202,62,44 1670
+256 Primary Red - Magenta 130,47,71 1512
+278 Burnt Sienna 121,76,64 1838
+280 Vermilion Hue 195,53,48 1509
+304 Brilliant Green Light 0,161,90 1626
+305 Brilliant Green Deep 0,111,69 1571
+321 Phthalo Green 28,73,71 1394
+323 Yellowish Green 120,210,91 1601
+356 Emerald Green 132,118 1624
+358 Sap Green 55,62,57 1545
+366 Sky Blue Celeste 123,185 1743
+378 Phthalo Blue 28,101,164 1665
+390 Ultramarine 40,44,138 1618
+400 Primary Blue - Cyan 107,146 1615
+404 King’s Blue 34,177,221 1678
+408 Turquoise Blue 118,122 1590
+438 Lilac 172,150,199 1589
+443 Violet 62,54,67 1559
+447 Brilliant Violet 119,94,171 1640
+492 Burnt Umber 82,62,57 1672
+493 Raw Umber 88,72,61 1917
+530 Black 35,35,35 1363
+
+Grumbacher Pre-Tested Professional Oil
+1 Alizarin Crimson 70,21,28 1301
+23 Burnt Sienna 97,46,36 1755
+24 Burnt Umber 47,37,31 1731
+25 Cadmium Orange Medium 225,98,0 2384
+26 Cadmium Red Deep 144,6,30 2387
+27 Cadmium Red Light 218,34,23 2795
+29 Cadmium Red Medium 169,6,30 2275
+30 Cadmium Red 196,25,36 2548
+31 Cadmium Yellow Deep 255,145,0 2451
+33 Cadmium Yellow Light 255,194,0 2340
+34 Cadmium Yellow Medium 255,163,0 2167
+36 Cadmium Yellow Pale 252,219,0 2739
+40 Cerulean Blue 0,80,113 2470
+48 Chromium Oxide Green 64,101,59 2958
+49 Cobalt Blue 22,51,110 2015
+51 Cobalt Rose 103,53,73 1658
+60 Diarylide Yellow 255,143,0 1380
+61 Dioxazine Purple 44,42,44 1620
+76 French Ultramarine Blue 16,16,38 1663
+95 Grumbacher Red 193,20,9 1683
+102 Hansa Yellow 244,190,0 1429
+109 Indanthrone Blue 26,20,28 1517
+115 Ivory Black 34,35,36 1733
+160 Permanent Blue 25,26,46 1763
+166 Prussian Green 43,70,25 1470
+168 Prussian Blue 23,15,12 1430
+170 Quinacridone Red 158,11,37 1411
+171 Raw Sienna 151,92,41 1988
+172 Raw Umber 52,45,38 1622
+200 Superba White 253,249,228 2724
+203 Thalo Blue 27,15,54 1333
+205 Thalo Green (Blue Shade) 0,28,36 1505
+208 Thalo Red Rose 132,16,32 1434
+211 Thio Violet 86,29,41 1473
+218 Unbleached Titanium White 191,173,141 2542
+232 Viridian 0,56,44 1639
+244 Yellow Ochre 181,124,41 1905
+306 Thalo® Green Yellow Shade 0,44,39 1457
+309 Cobalt Turquoise 149,154 2146
+310 Cobalt Blue Deep 3,47,96 2085
+311 Bismuth Yellow 254,226,0 1828
+312 Pyrrole Red 210,25,24 1759
+315 Perylene Red 116,6,22 1653
+21211 Titanium White 253,251,241 2662
+
+Primacryl - Schmincke
+101 Titanium White 254,254,251 1768
+205 Lemon Yellow 248,224,0 1356
+207 Cadmium Yellow Light 255,227,0 1411
+211 Cadmium Yellow Medium 255,206,0 1551
+213 Cadmium Yellow Deep 255,159,0 1522
+215 Brilliant Orange 242,73,0 1396
+317 Cadmium Red Light 229,42,14 1528
+320 Cadmium Red Medium 197,0,27 1566
+321 Carmine 182,0,16 1234
+322 Cadmium Red Deep 173,3,35 1591
+325 Quinacridone Red 146,0,34 1308
+326 Quinacridone Magenta 157,25,78 1282
+327 Magenta 197,87,153 1464
+328 Quinacridone Violet 110,0,42 1307
+433 Ultramarine Blue 50,47,78 1437
+434 Cobalt Blue Deep 45,69,124 1463
+435 Cobalt Blue Light 36,94,190 1432
+438 Phthalo Blue rs 29,44,87 1311
+439 Phthalo Blue Cyan 0,53,107 1377
+440 Prussian Blue 47,60,70 1378
+454 Cerulean Blue 122,163 1410
+561 Turmaline Green 0,80,61 1560
+562 Chromium Oxide Green Brilliant 0,78,67 1362
+563 Phthalo Green bs 25,52,51 1297
+564 Phthalo Green ys 0,76,47 1341
+567 Permanent Green Light 54,165,73 1456
+675 Light Ochre 171,111,23 1375
+677 Raw Umber 106,76,42 1404
+678 Sienna 134,83,39 1391
+679 Burnt Sienna 117,45,25 1436
+684 Natural Burnt Umber 70,49,41 1492
+792 Ivory Black 35,35,35 1221
+
+Professional Acrylic - Winsor & Newton
+19 Azo Yellow Medium 255,206,0 1321
+25 Bismuth Yellow 255,235,0 1369
+39 Azo Yellow Deep 255,155,0 1330
+60 Buff Titanium 222,186,123 1578
+74 Burnt Sienna 81,36,24 1287
+76 Burnt Umber 84,50,29 1369
+86 Cadmium Lemon 255,238,18 1538
+89 Cadmium Orange 255,122,0 1581
+97 Cadmium Red Deep 170,20,40 1413
+99 CadRedMed 106,37,39 1587
+100 Cadmium Red Light 230,55,20 1545
+111 Cadmium Yellow Deep 255,181,0 1493
+116 Cadmium Yellow Medium 255,201,0 1493
+130 Cerulean Blue Chromium 0,90,151 1477
+137 Cerulean Blue 108,163 1606
+162 Chromium Oxide Green 76,115,71 1682
+178 Cobalt Blue 22,71,153 1580
+180 Cobalt Blue Deep 57,50,125 1693
+184 Cobalt Green 131,107 1524
+185 Cobalt Green Deep 8,82,67 1554
+191 Cobalt Turquoise Light 163,166 1520
+217 Davy's Gray 108,101,77 1448
+229 Dioxazine Purple 35,29,31 1213
+294 Green Gold 67,72,44 1295
+311 Hooker's Green 52,64,38 1279
+321 Indanthrene Blue 34,21,36 1263
+331 Ivory Black 41,41,41 1359
+346 Lemon Yellow 243,224,0 1233
+362 Light Red 158,75,53 1421
+386 Mars Black 46,45,44 1550
+421 Naphthol Red Light 188,14,3 1236
+423 Naphthol Red Medium 175,0,7 1235
+425 Naples Yellow Deep 235,165,63 1491
+439 Nickel Azo Yellow 131,92,2 1312
+447 Olive Green 41,50,34 1263
+460 Perylene Green 39,32,32 1265
+464 Perylene Red 139,0,20 1289
+466 Permanent Alizarin Crimson 89,26,34 1191
+470 Perylene Violet 58,22,23 1239
+503 Permanent Sap Green 24,38,21 1289
+507 Perylene Maroon 76,20,22 1225
+514 Phthalo Blue (Red Shade) 25,14,58 1097
+515 Phthalo Blue (Green Shade) 16,36,53 1268
+519 Pyrrole Orange 244,66,0 1246
+521 Phthalo Green (Yellow Shade) 0,47,42 1286
+522 Phthalo Green (Blue Shade) 2,33,39 1289
+526 Phthalo Turquoise 0,55,60 1253
+534 Pyrrole Red 193,0,28 1252
+536 Pyrrole Red Light 215,34,34 1241
+537 Potter's Pink 129,67,78 1380
+545 Quinacridone Magenta 78,17,31 1260
+548 Quinacridone Red 154,21,36 1302
+549 Quinacridone Burnt Orange 74,36,35 1268
+550 Quinacridone Violet 96,22,47 1274
+552 Raw Sienna 111,69,28 1346
+554 Raw Umber 62,54,46 1329
+644 Titanium White 253,254,249 1728
+664 Ultramarine Blue 53,48,83 1385
+672 Ultramarine Violet 54,52,68 1435
+744 Yellow Ochre 162,109,51 1436
+
+Rembrandt Extra-Fine Artists' Oil
+105 Titanium White 253,254,249 2333
+207 Cad. Yellow Lemon 248,222,2 2524
+211 Cadmium Orange 255,110,14 2552
+227 Yellow Ochre 172,119,38 2056
+232 Orange Ochre 147,76,44 2078
+234 Raw Sienna 139,95,47 1789
+271 Cadmium Yellow M 255,192,0 2513
+303 Cadmium Red L 231,56,8 2489
+306 Cadmium Red D 182,21,35 2592
+311 Vermilion 245,69,0 1732
+314 Cadmium Red M 205,38,30 2812
+318 Carmine 112,17,28 1754
+334 Scarlet 143,16,35 1637
+342 Perm.Madder D 99,30,43 1598
+349 Venetian Red 120,48,38 2517
+366 Quinacridone Rose 127,26,42 1612
+408 Raw Umber 50,43,38 1722
+409 Burnt Umber 60,40,35 1694
+411 Burnt Sienna 101,56,47 1898
+506 Ultramarine D 30,29,160 1884
+507 Ultramarine Violet 78,67,149 1898
+508 Prussian Blue 24,28,43 1706
+515 Cobalt Blue D 24,40,100 2198
+534 Cerulean Blue 121,194 2369
+537 Perm.Violet M 99,0,54 1475
+539 Cobalt Violet 132,61,111 1978
+568 Perm. Blue Violet 87,24,114 1947
+576 Phthalo BlueGreen 29,22,56 1618
+583 Phthalo Blue Red 7,43,115 1636
+585 Indanthrene Blue 30,32,47 1544
+586 Cobalt Turq.Blue 0,96,126 2342
+610 Cobalt Green 0,104,90 2393
+616 Viridian 0,89,85 1757
+623 Sap Green 73,99,61 1859
+668 Chromium Ox.Green 69,106,66 2465
+680 Phthalo GreenBlue 0,67,52 1758
+681 Phthalo Green Yellow 0,82,40 1801
+682 Cobalt Turq.Green 35,125,86 2190
+701 Ivory Black 49,51,54 1731
+
+Sennelier
+116 Titanium White 250,250,245 2347
+136 Titanium Buff 238,218,172 2205
+202 Burnt Umber 68,47,38 2096
+205 Raw Umber 50,42,33 1883
+208 Raw Sienna 125,80,35 1819
+211 Burnt Sienna 95,40,20 2070
+252 Yellow Ochre 168,110,40 2246
+254 Light Yellow Ochre 235,166,51 2377
+305 Cerulean Blue 0,90,136 3057
+307 Cobalt Blue 36,68,131 2285
+312 Ultramarine Light 15,12,79 2230
+314 French Ultramarine 22,17,54 2026
+318 Prussian Blue 35,41,42 2055
+326 Phthalo Blue 56,55,68 1821
+339 Turquoise Light 166,174 2605
+471 Madder Brown 66,35,26 1325
+501 Lemon Yellow 251,214,0 1618
+529 Cadmium Yellow Light 255,210,0 2367
+531 Cadmium Yellow Medium 0,2500
+533 Cadmium Yellow Deep 255,155,0 2407
+535 Cadmium Yellow Lemon 251,223,0 2318
+537 Cadmium Yellow Orange 255,131,0 2427
+559 Auroline 214,159,0 2075
+590 Indian Yellow Orange 230,124,0 1672
+605 Cadmium Red Light 202,20,19 2440
+606 Cadmium Red Deep 163,0,28 2582
+607 Cadmium Red Medium 178,0,18 2360
+609 Cadmium Red Orange 242,76,0 2415
+636 Sennelier Red 206,14,7 2257
+639 Carmine Deep 131,7,23 1920
+688 Crimson Lake 139,16,26 1286
+695 Alizarin Crimson 78,42,43 1281
+699 Perm.Alizarin Crimson Deep 59,29,27 1706
+755 Ivory Black 25,25,24 1567
+759 Mars Black 22,20,18 1844
+815 Chromium Oxide Green 74,112,66 2498
+817 Phthalo Green Warm 0,46,37 2270
+818 Phthalo Green Cool 34,45,48 1335
+833 Cobalt Green Light 171,191,106 2526
+835 Cobalt Green Deep 8,76,60 3090
+837 Viridian 0,68,59 1712
+915 Manganese Violet 57,20,65 1945
+916 Ultramarine Violet 28,25,41 1955
+917 Dioxazine Violet 57,57,55 1989
+941 Magenta 73,28,39 2253
+953 Ultramarine Rose 65,30,69 2314
+
+System 3 Original Acrylic - Daler Rowney
+6 Zinc Mixing White 247,250,245 1587
+9 Titanium White 251,251,246 1615
+24 Buff Titanium 213,195,161 1451
+36 Mars Black 51,49,50 1618
+40 Process Black 49,49,49 1489
+110 Cobalt Blue (hue) 43,91,192 1389
+112 Coeruleum Blue (hue) 109,161 1602
+120 Process Cyan 44,51,85 1526
+123 Ultramarine 51,48,80 1600
+134 Prussian Blue (hue) 46,46,60 1516
+142 Phthalo Blue 49,45,81 1501
+221 Burnt Sienna 123,62,51 1360
+223 Burnt Umber 75,60,55 1535
+247 Raw Umber 67,60,55 1549
+352 Hooker’s Green 46,62,52 1486
+361 Phthalo Green 38,58,58 1573
+367 Oxide of Chromium Green 81,117,76 1614
+375 Sap Green 42,75,49 1377
+408 Deep Violet 57,51,53 1507
+412 Process Magenta 138,47,68 1516
+503 Cadmium Red (hue) 189,45,44 1511
+504 Cadmium Red Deep 159,43,44 1494
+588 Vermilion (hue) 210,45,37 1387
+618 Cadmium Yellow D Hue 238,139,0 1494
+619 Cadmium Orange (hue) 227,71,37 1270
+651 Lemon Yellow 241,222,0 1461
+663 Yellow Ochre 189,137,62 1285
+667 Raw Sienna 163,105,59 1441
+675 Process Yellow 254,208,0 1443
+
+Vallejo Acrylic Studio
+1 Cadmium Lemon Yellow 246,226,0 1219
+2 Cadmium Red 172,23,28 1251
+3 Naphtol Crimson 143,27,37 1254
+4 Ultramarine Blue 42,41,77 1401
+5 Phthalo Blue 39,33,78 1229
+6 Phthalo Green 22,47,53 1253
+8 Mars Yellow 194,134,33 1323
+10 Mars Red 134,55,45 1432
+12 Mars Black 48,47,47 1387
+13 Azo Yellow Orange 223,132,0 1212
+14 Permanent Violet 43,38,39 1249
+15 Orange 220,58,34 1245
+16 Sap Green 37,52,40 1245
+17 Raw Umber 96,81,62 1363
+18 Burnt Umber 82,59,51 1386
+19 Raw Sienna 163,109,40 1325
+20 Burnt Sienna 131,63,45 1379
+21 Naples Yellow 238,189,104 1413
+22 Cadmium Yellow Deep 255,187,0 1249
+23 Magenta 125,16,61 1244
+24 Primary Blue 141,206 1390
+25 Cobalt Blue 50,97,192 1424
+26 Rose Madder 114,29,30 1252
+41 Titanium White 243,243,246 1409
+43 Cadmium Yellow Pale 251,205,0 1193
+45 Dark Cad Red 148,43,32 1268
+46 Prussian Blue Phthalo 40,39,51 1382

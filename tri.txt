@@ -1,0 +1,257 @@
+import streamlit as st
+import cv2
+import numpy as np
+import random
+import math
+
+# -----------------------------
+# Helper: Generate a Random Triangle
+# -----------------------------
+def generate_random_triangle(image_shape, min_size, max_size):
+    """
+    Generates a triangle with a random size between min_size and max_size,
+    a random rotation, and a slight vertex distortion.
+    The triangle is generated within image_shape dimensions.
+    """
+    h, w = image_shape
+    # Pick a random size between min_size and max_size
+    size = random.randint(min_size, max_size)
+    # Use a margin to ensure the triangle is fully inside the padded image
+    margin = max_size
+    center_x = random.randint(margin, w - margin)
+    center_y = random.randint(margin, h - margin)
+    center = np.array([center_x, center_y])
+    
+    # Create a base equilateral triangle (centered at (0,0))
+    base_triangle = np.array([
+        [0, -size / math.sqrt(3)],
+        [-size / 2, size / (2 * math.sqrt(3))],
+        [size / 2, size / (2 * math.sqrt(3))]
+    ])
+    
+    # Apply a slight random distortion to each vertex to avoid perfect symmetry
+    distortion = np.random.uniform(0.9, 1.1, base_triangle.shape)
+    base_triangle = base_triangle * distortion
+    
+    # Rotate the triangle by a random angle between 0 and 2pi
+    angle = random.uniform(0, 2 * math.pi)
+    rotation_matrix = np.array([
+        [math.cos(angle), -math.sin(angle)],
+        [math.sin(angle),  math.cos(angle)]
+    ])
+    rotated_triangle = base_triangle.dot(rotation_matrix.T)
+    
+    # Shift the triangle to the chosen center
+    triangle = rotated_triangle + center
+    return triangle.astype(np.int32)
+
+# -----------------------------
+# Encode Function for Triangles (with Padding and Two-Pass Generation)
+# -----------------------------
+def encode(input_image, shape_type, output_path, **kwargs):
+    shape_type = shape_type.lower()
+    if shape_type in ['triangle', 'triangles']:
+        # Resize input image for processing
+        image_resized = cv2.resize(input_image, (500, 500))
+        num_triangles = kwargs.get('num_triangles', 50)
+        min_size = kwargs.get('min_size', 20)
+        max_size = kwargs.get('max_size', 100)
+        
+        # Pad the image so that triangles can be placed on/near the boundary.
+        # Use a padding equal to max_size.
+        padding = max_size
+        image_padded = cv2.copyMakeBorder(image_resized, padding, padding, padding, padding, cv2.BORDER_REFLECT)
+        
+        # Create a global mask for the padded image to ensure non-overlap.
+        global_mask = np.zeros(image_padded.shape[:2], dtype=np.uint8)
+        triangles = []
+        attempts = 0
+        max_attempts = num_triangles * 100  # Prevent infinite loops
+
+        # ---- First pass: use random sizes between min_size and max_size ----
+        while len(triangles) < num_triangles and attempts < max_attempts:
+            candidate = generate_random_triangle(image_padded.shape[:2], min_size, max_size)
+            candidate_mask = np.zeros(image_padded.shape[:2], dtype=np.uint8)
+            cv2.fillConvexPoly(candidate_mask, candidate, 255)
+            overlap = cv2.bitwise_and(global_mask, candidate_mask)
+            if cv2.countNonZero(overlap) == 0:
+                triangles.append(candidate)
+                global_mask = cv2.bitwise_or(global_mask, candidate_mask)
+            attempts += 1
+
+        # ---- Second pass: if not enough, try with fixed min_size (smaller triangles)
+        attempts = 0
+        while len(triangles) < num_triangles and attempts < max_attempts:
+            candidate = generate_random_triangle(image_padded.shape[:2], min_size, min_size)
+            candidate_mask = np.zeros(image_padded.shape[:2], dtype=np.uint8)
+            cv2.fillConvexPoly(candidate_mask, candidate, 255)
+            overlap = cv2.bitwise_and(global_mask, candidate_mask)
+            if cv2.countNonZero(overlap) == 0:
+                triangles.append(candidate)
+                global_mask = cv2.bitwise_or(global_mask, candidate_mask)
+            attempts += 1
+
+        if len(triangles) < num_triangles:
+            st.warning(f"Only generated {len(triangles)} non-overlapping triangles out of {num_triangles} requested.")
+
+        # Create an overlay on the padded image by filling triangles with average color
+        overlay_padded = image_padded.copy()
+        for tri in triangles:
+            mask = np.zeros(image_padded.shape[:2], dtype=np.uint8)
+            cv2.fillConvexPoly(mask, tri, 255)
+            avg_color = cv2.mean(image_padded, mask=mask)[:3]
+            avg_color = tuple(map(int, avg_color))
+            cv2.fillConvexPoly(overlay_padded, tri, avg_color)
+
+        # Crop the overlay back to the original image area.
+        overlay_cropped = overlay_padded[padding:padding+image_resized.shape[0], padding:padding+image_resized.shape[1]]
+        original_resized = image_resized.copy()
+        
+        # Adjust triangle coordinates by subtracting the padding.
+        triangles_cropped = []
+        for tri in triangles:
+            tri_cropped = tri - np.array([padding, padding])
+            # Optionally clip coordinates to lie within the image bounds.
+            tri_cropped[:, 0] = np.clip(tri_cropped[:, 0], 0, image_resized.shape[1]-1)
+            tri_cropped[:, 1] = np.clip(tri_cropped[:, 1], 0, image_resized.shape[0]-1)
+            triangles_cropped.append(tri_cropped)
+        
+        boundaries = triangles_cropped
+        encoded_image = overlay_cropped.copy()
+    else:
+        st.error("Only the triangle shape is supported in this demo.")
+        return None, None
+
+    # -----------------------------
+    # Encode the boundaries into the blue channel's LSB
+    # -----------------------------
+    encode_mask = np.zeros(original_resized.shape[:2], dtype=np.uint8)
+    for tri in boundaries:
+        cv2.polylines(encode_mask, [tri], isClosed=True, color=255, thickness=1)
+    
+    # Combine the overlay with the original image based on the boundary mask.
+    final_encoded = encoded_image.copy()
+    for i in range(final_encoded.shape[0]):
+        for j in range(final_encoded.shape[1]):
+            if encode_mask[i, j] == 255:
+                final_encoded[i, j] = original_resized[i, j]
+                final_encoded[i, j, 0] = (final_encoded[i, j, 0] & 254) | 1
+            else:
+                final_encoded[i, j, 0] = final_encoded[i, j, 0] & 254
+
+    # -----------------------------
+    # Add corner markers for validation (3x3 blocks in each corner)
+    # -----------------------------
+    corner_size = 3
+    h_img, w_img, _ = final_encoded.shape
+    corner_positions = {
+        "top_left": (0, 0),
+        "top_right": (0, w_img - corner_size),
+        "bottom_left": (h_img - corner_size, 0),
+        "bottom_right": (h_img - corner_size, w_img - corner_size)
+    }
+    expected_patterns = {
+        "top_left": (1, 1, 1),
+        "top_right": (0, 0, 1),
+        "bottom_left": (0, 1, 0),
+        "bottom_right": (1, 0, 0)
+    }
+    for corner, (y, x) in corner_positions.items():
+        exp_b, exp_g, exp_r = expected_patterns[corner]
+        for i in range(y, y + corner_size):
+            for j in range(x, x + corner_size):
+                final_encoded[i, j, 0] = (final_encoded[i, j, 0] & 254) | exp_b
+                final_encoded[i, j, 1] = (final_encoded[i, j, 1] & 254) | exp_g
+                final_encoded[i, j, 2] = (final_encoded[i, j, 2] & 254) | exp_r
+
+    return final_encoded, boundaries
+
+# -----------------------------
+# Decode Function (Triangle Branch)
+# -----------------------------
+def decode(encoded_image, shape_type, boundaries=None, **kwargs):
+    shape_type = shape_type.lower()
+    if encoded_image is None:
+        st.error("Error: Encoded image is None.")
+        return None, None, None
+    h, w, _ = encoded_image.shape
+    blue_lsb = encoded_image[:, :, 0] & 1
+    corner_size = 3
+    corner_positions = {
+        "top_left": (0, 0),
+        "top_right": (0, w - corner_size),
+        "bottom_left": (h - corner_size, 0),
+        "bottom_right": (h - corner_size, w - corner_size)
+    }
+    expected_patterns = {
+        "top_left": (1, 1, 1),
+        "top_right": (0, 0, 1),
+        "bottom_left": (0, 1, 0),
+        "bottom_right": (1, 0, 0)
+    }
+    threshold = 6
+    valid = True
+    for corner, (y, x) in corner_positions.items():
+        exp_b, exp_g, exp_r = expected_patterns[corner]
+        count_b = np.sum(blue_lsb[y:y+corner_size, x:x+corner_size] == exp_b)
+        if count_b < threshold:
+            valid = False
+            st.warning(f"Corner '{corner}' failed validation.")
+            break
+    if valid:
+        st.info("Valid encoding detected. Decoding boundaries.")
+        binary_image = (blue_lsb * 255).astype(np.uint8)
+    else:
+        st.warning("No valid encoding found. Returning black binary image.")
+        binary_image = np.zeros_like(blue_lsb, dtype=np.uint8)
+    if cv2.countNonZero(binary_image) < 50:
+        st.info("Binary image nearly empty; applying dilation.")
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+        binary_image = cv2.dilate(binary_image, kernel, iterations=1)
+    rgb_values = []
+    annotated = encoded_image.copy()
+    if shape_type in ['triangle', 'triangles']:
+        triangles = boundaries if boundaries is not None else []
+        for tri in triangles:
+            pts = np.int32(tri)
+            cv2.polylines(annotated, [pts], isClosed=True, color=(0, 255, 0), thickness=1)
+            center = np.mean(tri, axis=0)
+            center_x = int(np.clip(center[0], 0, w - 1))
+            center_y = int(np.clip(center[1], 0, h - 1))
+            b, g, r = encoded_image[center_y, center_x]
+            rgb_values.append([r, g, b])
+    else:
+        st.error("Unsupported shape type for decoding.")
+    
+    return binary_image, annotated, rgb_values
+
+# -----------------------------
+# Streamlit Interface
+# -----------------------------
+st.title("Non-Overlapping Triangle Encoder and Decoder with Padding")
+
+uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "png", "jpeg"])
+if uploaded_file is not None:
+    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+    input_image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+    # Convert from BGR to RGB for display
+    input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+    
+    shape_type = st.selectbox("Select shape type", ["triangle"])
+    num_shapes = st.number_input("Number of Triangles", min_value=1, max_value=1000, value=50)
+    min_size = st.number_input("Minimum Triangle Size", min_value=5, max_value=500, value=20)
+    max_size = st.number_input("Maximum Triangle Size", min_value=5, max_value=500, value=100)
+    
+    if shape_type == "triangle":
+        encoded_image, boundaries = encode(input_image, shape_type, "output.png",
+                                             num_triangles=num_shapes, min_size=min_size, max_size=max_size)
+        st.subheader("Encoded Image")
+        st.image(encoded_image, channels="RGB")
+        
+        if st.button("Decode Image"):
+            binary_image, annotated, rgb_values = decode(encoded_image, shape_type, boundaries)
+            st.subheader("Binary Image (LSB extracted)")
+            st.image(binary_image, channels="GRAY")
+            st.subheader("Annotated Image (boundaries drawn)")
+            st.image(annotated, channels="RGB")
+            st.write("Extracted RGB Values:", rgb_values)
