@@ -630,72 +630,172 @@ def allowed_file(filename):
 
 # ─────────── Route ────────────────────────────────────────────────────
 
+
+def get_db_list():
+    
+    full_txt = read_color_file("color.txt")
+    databases = parse_color_db(full_txt) 
+    return databases
+
+
 @app.route("/foogle_man_repo", methods=["GET", "POST"])
 def foogle_man_repo_page():
+    # —– Outputs for art form 
     original_b64  = None
     generated_b64 = None
     download_url  = None
     num_shapes    = 0
 
+    # —– Outputs for recipe form
+    error               = None
+    recipe_results      = None
+    selected_recipe_rgb = None
+    db_list             = get_db_list()
+
     if request.method == "POST":
-        file = request.files.get("image")
-        if not file or file.filename == "" or not allowed_file(file.filename):
-            # invalid upload → just re-render
-            return render_template("foogle_man_repo.html")
+        # 1) Paint‐Recipe submission?
+        if request.form.get("action") == "generate_recipe":
+            sel = request.form.get("selected_color", "")
+            try:
+                r, g, b = [int(x.strip()) for x in sel.split(",")]
+                selected_recipe_rgb = (r, g, b)
+            except ValueError:
+                error = "Invalid RGB—please click on the generated art to pick a colour."
+            else:
+                # parse step & db_choice
+                try:
+                    step = float(request.form.get("step", 10.0))
+                except ValueError:
+                    step = 10.0
+                db_choice = request.form.get("db_choice", "")
+                if db_choice not in db_list:
+                    error = f"Unknown colour DB '{db_choice}'."
+                else:
+                    # load that database
+                    full_txt = read_color_file("color.txt")
+                    all_dbs   = parse_color_db(full_txt)
+                    base_dict = {name: tuple(rgb) for name, rgb in all_dbs[db_choice]}
 
-        # read image
-        data  = np.frombuffer(file.read(), dtype=np.uint8)
-        image = cv2.imdecode(data, cv2.IMREAD_COLOR)
-        if image is None:
-            return render_template("foogle_man_repo.html")
+                    # compute recipes
+                    recipe_results = generate_recipes(
+                        selected_recipe_rgb, base_dict, step=step
+                    )
+                    # stringify mix tuples
+                    for rec in recipe_results:
+                        if isinstance(rec.get("mix"), (tuple, list)):
+                            rec["mix"] = ", ".join(str(c) for c in rec["mix"])
 
-        # form params
-        shape_type = request.form.get("shape_type", "Circles")
-        min_size   = int(request.form.get("min_size", 5))
-        max_size   = int(request.form.get("max_size", 30))
-        num_shapes = int(request.form.get("num_shapes", 100))
-        block_size = (min_size + max_size) // 5
-
-        # processing
-        proc, scale = resize_for_processing(image)
-        pix = pixelate_image(proc, block_size)
-        if shape_type == "Circles":
-            art = draw_random_circles(pix, min_size, max_size, num_shapes)
-        elif shape_type == "Rectangles":
-            art = draw_random_rectangles(pix, min_size, max_size, num_shapes)
+        # 2) Otherwise, Image→Art submission
         else:
-            art = draw_random_triangles(pix, min_size, max_size, num_shapes)
+            file = request.files.get("image")
+            if file and file.filename and allowed_file(file.filename):
+                # decode into cv2 image
+                data  = np.frombuffer(file.read(), dtype=np.uint8)
+                image = cv2.imdecode(data, cv2.IMREAD_COLOR)
+                if image is not None:
+                    # form params
+                    shape_type = request.form.get("shape_type", "Circles")
+                    min_size   = int(request.form.get("min_size", 5))
+                    max_size   = int(request.form.get("max_size", 30))
+                    num_shapes = int(request.form.get("num_shapes", 100))
+                    block_size = (min_size + max_size) // 5
 
-        if scale < 1.0:
-            art = cv2.resize(art, (image.shape[1], image.shape[0]),
-                             interpolation=cv2.INTER_LINEAR)
+                    # processing
+                    proc, scale = resize_for_processing(image)
+                    pix = pixelate_image(proc, block_size)
+                    if shape_type == "Circles":
+                        art = draw_random_circles(pix, min_size, max_size, num_shapes)
+                    elif shape_type == "Rectangles":
+                        art = draw_random_rectangles(pix, min_size, max_size, num_shapes)
+                    else:
+                        art = draw_random_triangles(pix, min_size, max_size, num_shapes)
 
-        # encode original
-        orig_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        buf = BytesIO()
-        Image.fromarray(orig_rgb).save(buf, format="PNG")
-        original_b64 = base64.b64encode(buf.getvalue()).decode("ascii")
+                    if scale < 1.0:
+                        art = cv2.resize(
+                            art,
+                            (image.shape[1], image.shape[0]),
+                            interpolation=cv2.INTER_LINEAR
+                        )
 
-        # encode art
-        art_rgb = cv2.cvtColor(art, cv2.COLOR_BGR2RGB)
-        buf = BytesIO()
-        Image.fromarray(art_rgb).save(buf, format="PNG")
-        generated_b64 = base64.b64encode(buf.getvalue()).decode("ascii")
+                    # encode original
+                    orig_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                    buf = BytesIO()
+                    Image.fromarray(orig_rgb).save(buf, format="PNG")
+                    original_b64 = base64.b64encode(buf.getvalue()).decode("ascii")
 
-        download_url = f"data:image/png;base64,{generated_b64}"
+                    # encode art
+                    art_rgb = cv2.cvtColor(art, cv2.COLOR_BGR2RGB)
+                    buf = BytesIO()
+                    Image.fromarray(art_rgb).save(buf, format="PNG")
+                    generated_b64 = base64.b64encode(buf.getvalue()).decode("ascii")
+
+                    download_url = f"data:image/png;base64,{generated_b64}"
 
     return render_template(
         "foogle_man_repo.html",
+        # art vars
         original_image  = original_b64,
         generated_image = generated_b64,
         num_shapes      = num_shapes,
-        download_url    = download_url
+        download_url    = download_url,
+
+        # recipe vars
+        error               = error,
+        db_list             = db_list,
+        selected_recipe_rgb = selected_recipe_rgb,
+        recipe_results      = recipe_results
     )
 @app.route("/paint_geometrize")
 def paint_geometrize_page():
-    # if geometrize_app:
-    #     return geometrize_app()
-    return render_template("paint_geometrize.html", active_page="paint_geometrize")
+    """
+    1. GET:  render empty form
+    2. POST: parse selected_color, db_choice, step → generate_recipes → re-render with results
+    """
+    error               = None
+    recipe_results      = None
+    selected_recipe_rgb = None
+
+    # load DB choices for dropdown on every render
+    db_list = get_db_list()
+
+    if request.method == "POST" and request.form.get("action") == "generate_recipe":
+        sel = request.form.get("selected_color", "")
+        try:
+            r, g, b = [int(x.strip()) for x in sel.split(",")]
+            selected_recipe_rgb = (r, g, b)
+        except ValueError:
+            error = "Invalid RGB—please click on the image to pick a colour."
+        else:
+            # parse step & db_choice
+            try:
+                step = float(request.form.get("step", 10.0))
+            except ValueError:
+                step = 10.0
+            db_choice = request.form.get("db_choice", "")
+            if db_choice not in db_list:
+                error = f"Unknown colour DB '{db_choice}'."
+            else:
+                # load that database
+                full_txt = read_color_file("color.txt")
+                all_dbs   = parse_color_db(full_txt)
+                base_dict = {name: tuple(rgb) for name, rgb in all_dbs[db_choice]}
+
+                # compute recipes
+                recipe_results = generate_recipes(selected_recipe_rgb, base_dict, step=step)
+
+                # stringify any tuple mixes for JSON/template safety
+                for rec in recipe_results:
+                    if isinstance(rec.get("mix"), (tuple, list)):
+                        rec["mix"] = ", ".join(str(c) for c in rec["mix"])
+
+    return render_template(
+        "paint_geometrize.html",
+        error=error,
+        db_list=db_list,
+        selected_recipe_rgb=selected_recipe_rgb,
+        recipe_results=recipe_results,
+        active_page="paint_geometrize"
+    )
 
 
 # ═══════════ NEW AJAX ENDPOINT ═══════════
@@ -728,6 +828,7 @@ def ajax_generate_recipe():
         })
     return jsonify(ok=True, recipes=payload)
 # ══════════════════════════════════════════
+
     
 # ─────────── MAIN ─────────────────────────────────────────────────────
 if __name__ == "__main__":
