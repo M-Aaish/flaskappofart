@@ -168,52 +168,77 @@ def root():
     return redirect(url_for("image_generator_page"))
 
 
+ALLOWED_EXT = {".jpg", ".jpeg", ".png"}
+
+
+
 @app.route("/image_generator", methods=["GET", "POST"])
 def image_generator_page():
     """
-    Generate shape-art on an uploaded image. Uses EnDe.encode().
-    (Unchanged per your request.)
+    Generate shape-art on an uploaded image.
     """
     error = None
     result_image_data = None
 
+    # Values that let the template remember the previous form state
+    shape_option = "Triangle"
+    num_shapes   = 100
+    min_size     = 10
+    max_size     = 50
+
     if request.method == "POST":
-        file = request.files.get("base_image")
+        file = request.files.get("image")               # ← matches name="image"
         if not file or file.filename == "":
             error = "Please upload an image file."
         elif not allowed_file(file.filename):
-            error = "Unsupported file type."
+            error = "Unsupported file type. Allowed: JPG/PNG."
         else:
-            filename = secure_filename(file.filename)
+            filename  = secure_filename(file.filename)
             save_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
             file.save(save_path)
 
-            file_bytes = np.asarray(bytearray(open(save_path, "rb").read()), dtype=np.uint8)
-            img_bgr = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+            # Read the image into OpenCV
+            img_bgr = cv2.imdecode(
+                np.fromfile(save_path, dtype=np.uint8), cv2.IMREAD_COLOR
+            )
             if img_bgr is None:
                 error = "Failed to read uploaded image."
             else:
-                shape_opt = request.form.get("shape_type", "Triangle")
-                num_shapes = int(request.form.get("num_shapes", 100))
-                min_size = int(request.form.get("min_size", 10))
-                max_size = int(request.form.get("max_size", 50))
+                # ── form parameters ──────────────────────────────────────────
+                shape_option = request.form.get("shape_type", "Triangle")
+                num_shapes   = int(request.form.get("num_shapes", 100))
+
+                if shape_option == "Triangle":
+                    min_size = int(request.form.get("min_triangle_size", 15))
+                    max_size = int(request.form.get("max_triangle_size", 50))
+                else:
+                    min_size = int(request.form.get("min_size", 10))
+                    max_size = int(request.form.get("max_size", 15))
+
+                # optional: swap if user inverted the two numbers
+                if min_size > max_size:
+                    min_size, max_size = max_size, min_size
+                # ─────────────────────────────────────────────────────────────
 
                 try:
+                    # encode() = your shape-art generator
                     encoded_img, boundaries = encode(
                         img_bgr,
-                        shape_opt,
+                        shape_option,
                         output_path="",
                         num_shapes=num_shapes,
                         min_size=min_size,
-                        max_size=max_size
+                        max_size=max_size,
                     )
+
+                    # convert to PNG base64 for <img src>
                     encoded_rgb = cv2.cvtColor(encoded_img, cv2.COLOR_BGR2RGB)
                     pil_img = Image.fromarray(encoded_rgb)
                     buf = BytesIO()
                     pil_img.save(buf, format="PNG")
-                    buf.seek(0)
                     result_image_data = base64.b64encode(buf.getvalue()).decode("ascii")
 
+                    # stash a temp file for “Download” button
                     tmp_name = f"shape_art_{os.getpid()}.png"
                     tmp_path = os.path.join(app.config["UPLOAD_FOLDER"], tmp_name)
                     with open(tmp_path, "wb") as f_out:
@@ -227,10 +252,13 @@ def image_generator_page():
         "image_generator.html",
         error=error,
         result_image_data=result_image_data,
-        active_page="image_generator"
+        # keep the form sticky
+        shape_option=shape_option,
+        num_shapes=num_shapes,
+        min_size=min_size,
+        max_size=max_size,
+        active_page="image_generator",
     )
-
-
 @app.route("/download_shape_art")
 def download_shape_art():
     path = session.get("shape_art_path")
@@ -700,8 +728,7 @@ def ajax_generate_recipe():
         })
     return jsonify(ok=True, recipes=payload)
 # ══════════════════════════════════════════
-
-
+    
 # ─────────── MAIN ─────────────────────────────────────────────────────
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # Get port from environment (Render sets this)
